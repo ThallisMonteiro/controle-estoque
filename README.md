@@ -66,10 +66,4 @@ Algumas funcionalidades que pretendo adicionar futuramente:
 - dashboard mais completo
 - exportação de dados
 
----
 
-
-
-
-
-1. Clone o repositório:
