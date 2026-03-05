@@ -1,0 +1,186 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: #1f2937;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  margin: 0;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.navbar ul li a:hover {
+  background-color: #374151;
+}
+
+.navbar ul li a.ativo {
+  background-color: #4f46e5;
+}
+
+/* CONTEÚDO */
+.content {
+  padding: 30px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0 30px 0;
+}
+
+.card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  flex: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card.alerta {
+  border-left: 5px solid red;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.card p {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  background-color: white;
+  border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #e5e7eb;
+}
+
+/* Container principal */
+.container {
+  padding: 30px;
+}
+
+/* Cabeçalho da página */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Botão principal */
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.btn-primary:hover {
+  background-color: #1e40af;
+}
+
+/* Busca */
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  padding: 8px;
+  width: 300px;
+}
+
+/* Tabela */
+.tabela-produtos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-produtos th,
+.tabela-produtos td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.tabela-produtos th {
+  background-color: #f3f4f6;
+}
+
+/* Botões tabela */
+.btn-edit {
+  background-color: #f59e0b;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.form-produto {
+  background: #f3f4f6;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.form-produto input {
+  padding: 8px;
+}
