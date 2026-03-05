@@ -1,5 +1,5 @@
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-
+let produtoEditando = null;
 const btnAdicionar = document.querySelector(".btn-primary");
 const formProduto = document.getElementById("formProduto");
 const btnSalvar = document.getElementById("salvarProduto");
@@ -21,7 +21,7 @@ function renderizarProdutos() {
                 <td>R$ ${produto.precoUnitario.toFixed(2)}</td>
                 <td>R$ ${precoTotal.toFixed(2)}</td>
                 <td>
-                    <button class="btn-edit">Editar</button>
+                    <button class="btn-edit" onclick="editarProduto(${produto.id})">Editar</button>
                     <button class="btn-delete" data-id="${produto.id}">Excluir</button>
                 </td>
             </tr>
@@ -29,6 +29,19 @@ function renderizarProdutos() {
 
     tbody.innerHTML += linha;
   });
+}
+
+function editarProduto(id) {
+  const produto = produtos.find((p) => p.id === id);
+
+  document.getElementById("nome").value = produto.nome;
+  document.getElementById("categoria").value = produto.categoria;
+  document.getElementById("quantidade").value = produto.quantidade;
+  document.getElementById("precoUnitario").value = produto.precoUnitario;
+
+  formProduto.style.display = "flex";
+
+  produtoEditando = id;
 }
 
 tbody.addEventListener("click", (event) => {
@@ -72,10 +85,29 @@ btnSalvar.addEventListener("click", () => {
     precoUnitario,
   };
 
-  produtos.push(novoProduto);
-  localStorage.setItem("produtos", JSON.stringify(produtos));
+  if (produtoEditando) {
+    const produto = produtos.find((p) => p.id === produtoEditando);
 
-  // Notificar o dashboard para atualizar
+    produto.nome = nome;
+    produto.categoria = categoria;
+    produto.quantidade = quantidade;
+    produto.precoUnitario = precoUnitario;
+
+    produtoEditando = null;
+  } else {
+    const novoProduto = {
+      id: produtos.length + 1,
+      nome,
+      categoria,
+      quantidade,
+      precoUnitario,
+    };
+
+    produtos.push(novoProduto);
+  }
+  localStorage.setItem("produtos", JSON.stringify(produtos));
+  renderizarProdutos();
+
   window.dispatchEvent(new Event("produtosAtualizados"));
 
   formProduto.style.display = "none";
