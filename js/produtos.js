@@ -3,29 +3,50 @@ let produtoEditando = null;
 const btnAdicionar = document.querySelector(".btn-primary");
 const formProduto = document.getElementById("formProduto");
 const btnSalvar = document.getElementById("salvarProduto");
-
 const tbody = document.querySelector(".tabela-produtos tbody");
+const inputBusca = document.getElementById("buscarProduto");
 
-function renderizarProdutos() {
+function removerAcentos(texto) {
+  return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function buscarProdutos() {
+  const termo = removerAcentos(inputBusca.value.toLowerCase().trim());
+
+  if (termo === "") {
+    renderizarProdutos();
+    return;
+  }
+
+  const produtosFiltrados = produtos.filter((produto) => {
+    const nomeSemAcento = removerAcentos(produto.nome.toLowerCase());
+
+    return nomeSemAcento.includes(termo);
+  });
+
+  renderizarProdutos(produtosFiltrados);
+}
+
+function renderizarProdutos(lista = produtos) {
   tbody.innerHTML = "";
 
-  produtos.forEach((produto) => {
+  lista.forEach((produto) => {
     const precoTotal = produto.quantidade * produto.precoUnitario;
 
     const linha = `
-            <tr>
-                <td>${produto.id}</td>
-                <td>${produto.nome}</td>
-                <td>${produto.categoria}</td>
-                <td>${produto.quantidade}</td>
-                <td>R$ ${produto.precoUnitario.toFixed(2)}</td>
-                <td>R$ ${precoTotal.toFixed(2)}</td>
-                <td>
-                    <button class="btn-edit" onclick="editarProduto(${produto.id})">Editar</button>
-                    <button class="btn-delete" data-id="${produto.id}">Excluir</button>
-                </td>
-            </tr>
-        `;
+      <tr>
+        <td>${produto.id}</td>
+        <td>${produto.nome}</td>
+        <td>${produto.categoria}</td>
+        <td>${produto.quantidade}</td>
+        <td>R$ ${produto.precoUnitario.toFixed(2)}</td>
+        <td>R$ ${precoTotal.toFixed(2)}</td>
+        <td>
+          <button class="btn-edit" onclick="editarProduto(${produto.id})">Editar</button>
+          <button class="btn-delete" data-id="${produto.id}">Excluir</button>
+        </td>
+      </tr>
+    `;
 
     tbody.innerHTML += linha;
   });
@@ -119,3 +140,4 @@ btnSalvar.addEventListener("click", () => {
 });
 
 renderizarProdutos();
+inputBusca.addEventListener("input", buscarProdutos);
