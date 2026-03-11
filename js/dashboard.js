@@ -25,8 +25,34 @@ function atualizarDashboard() {
     });
 }
 
-// Ouvir eventos de atualização de produtos
 window.addEventListener("produtosAtualizados", atualizarDashboard);
 
-// Carregar dados inicialmente
+function atualizarDashboard() {
+  const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+
+  let totalProdutos = produtos.length;
+  let valorTotal = 0;
+  let estoqueBaixo = 0;
+
+  produtos.forEach((produto) => {
+    valorTotal += produto.quantidade * produto.precoUnitario;
+
+    if (produto.quantidade <= 5) {
+      estoqueBaixo++;
+    }
+  });
+
+  document.getElementById("totalProdutos").textContent = totalProdutos;
+
+  document.getElementById("valorTotal").textContent = valorTotal.toLocaleString(
+    "pt-BR",
+    {
+      style: "currency",
+      currency: "BRL",
+    },
+  );
+
+  document.getElementById("estoqueBaixo").textContent = estoqueBaixo;
+}
+
 atualizarDashboard();

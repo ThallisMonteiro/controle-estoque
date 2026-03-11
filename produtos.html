@@ -4,24 +4,54 @@
     <meta charset="UTF-8" />
     <title>Produtos - Controle de Estoque</title>
     <link rel="stylesheet" href="css/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
+
   <body>
-    <!-- NAVBAR -->
-    <header class="navbar">
-      <div class="logo">Controle de Estoque</div>
-      <ul>
-        <li><a href="index.html">Dashboard</a></li>
-        <li><a href="produtos.html" class="active">Produtos</a></li>
-        <li><a href="movimentacoes.html">Movimentações</a></li>
-        <li><a href="relatorios.html">Relatórios</a></li>
-      </ul>
+    <header class="sidebar">
+      <div class="logo_text">
+        <span class="logo-mini">EI</span>
+        <span class="logo-full">Estoque Inteligente</span>
+      </div>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html">
+              <i data-lucide="layout-dashboard"></i>
+              <span class="link-text">Dashboard</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="produtos.html" class="ativo">
+              <i data-lucide="box"></i>
+              <span class="link-text">Produtos</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="movimentacoes.html">
+              <i data-lucide="arrow-left-right"></i>
+              <span class="link-text">Movimentações</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="relatorios.html">
+              <i data-lucide="bar-chart-3"></i>
+              <span class="link-text">Relatórios</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </header>
 
-    <!-- CONTEÚDO -->
-    <main class="container">
+    <div class="main-content">
       <div class="page-header">
         <h1>Gestão de Produtos</h1>
         <button class="btn-primary">+ Adicionar Produto</button>
+
         <div class="form-produto" id="formProduto" style="display: none">
           <h3>Novo Produto</h3>
 
@@ -36,34 +66,35 @@
 
           <button id="salvarProduto" class="btn-primary">Salvar</button>
         </div>
-      </div>
 
-      <div class="search-box">
-        <input type="text" id="buscarProduto" placeholder="Buscar produto..." />
-      </div>
+        <div class="search-box">
+          <input
+            type="text"
+            id="buscarProduto"
+            placeholder="Buscar produto..."
+          />
+        </div>
 
-      <table class="tabela-produtos">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Quantidade</th>
-            <th>Preço Unitário</th>
-            <th>Preço Total</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <button class="btn-edit">Editar</button>
-              <button class="btn-delete">Excluir</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </main>
+        <table class="tabela-produtos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Quantidade</th>
+              <th>Preço Unitário</th>
+              <th>Preço Total</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
     <script src="js/produtos.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>

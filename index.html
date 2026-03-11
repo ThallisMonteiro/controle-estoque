@@ -4,30 +4,51 @@
     <meta charset="UTF-8" />
     <title>Controle de Estoque</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
   <body>
-    <!-- MENU SUPERIOR -->
-    <header class="navbar">
+    <header class="sidebar">
       <div class="logo_text">
-        <span>Estoque Inteligente</span>
+        <span class="logo-mini">EI</span>
+        <span class="logo-full">Estoque Inteligente</span>
       </div>
 
       <nav>
-        <ul>
-          <li><a href="index.html" class="ativo">Dashboard</a></li>
-          <li><a href="produtos.html">Produtos</a></li>
-          <li><a href="movimentacoes.html">Movimentações</a></li>
-          <li><a href="relatorios.html">Relatórios</a></li>
-        </ul>
-      </nav>
+  <ul>
+    <li>
+      <a href="index.html" class="ativo">
+        <i data-lucide="layout-dashboard"></i>
+        <span class="link-text">Dashboard</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="produtos.html">
+        <i data-lucide="box"></i>
+        <span class="link-text">Produtos</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="movimentacoes.html">
+        <i data-lucide="arrow-left-right"></i>
+        <span class="link-text">Movimentações</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="relatorios.html">
+        <i data-lucide="bar-chart-3"></i>
+        <span class="link-text">Relatórios</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
     </header>
 
-    <!-- CONTEÚDO -->
-    <main class="content">
+    <div class="main-content">
       <h1>Dashboard</h1>
 
       <div class="cards-container">
@@ -64,5 +85,6 @@
     </main>
 
     <script src="js/dashboard.js"></script>
+    <script>lucide.createIcons();</script>
   </body>
 </html>
