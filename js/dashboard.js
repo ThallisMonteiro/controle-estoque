@@ -1,48 +1,47 @@
-const totalProdutos = document.getElementById("totalProdutos");
-const totalQuantidade = document.getElementById("totalQuantidade");
-const valorTotal = document.getElementById("valorTotal");
+const tabelaMovimentacoes = document.getElementById("tabelaMovimentacoes");
 
-function atualizarDashboard() {
-  const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+function carregarUltimasMovimentacoes() {
+  const movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
 
-  totalProdutos.textContent = produtos.length;
+  tabelaMovimentacoes.innerHTML = "";
 
-  let somaQuantidade = 0;
-  let somaValor = 0;
+  const ultimas = movimentacoes.slice(-5).reverse();
 
-  produtos.forEach((produto) => {
-    somaQuantidade += produto.quantidade;
-    somaValor += produto.quantidade * produto.precoUnitario;
+  ultimas.forEach((mov) => {
+    const linha = document.createElement("tr");
+
+    const tipoFormatado =
+      mov.tipo.toLowerCase() === "saida" ? "Saída" : "Entrada";
+
+    linha.innerHTML = `
+      <td>${mov.nome}</td>
+      <td class="${mov.tipo.toLowerCase() === "entrada" ? "entrada" : "saida"}">${tipoFormatado}</td>
+      <td>${mov.quantidade}</td>
+      <td>${mov.data}</td>
+      <td>${mov.destino || "-"}</td>
+
+      
+    `;
+
+    tabelaMovimentacoes.appendChild(linha);
   });
-
-  totalQuantidade.textContent = somaQuantidade;
-
-  valorTotal.textContent =
-    "R$ " +
-    somaValor.toLocaleString("pt-BR", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
 }
 
-window.addEventListener("produtosAtualizados", atualizarDashboard);
-
 function atualizarDashboard() {
   const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 
-  let totalProdutos = produtos.length;
   let valorTotal = 0;
   let estoqueBaixo = 0;
 
   produtos.forEach((produto) => {
-    valorTotal += produto.quantidade * produto.precoUnitario;
+    valorTotal += Number(produto.quantidade) * Number(produto.precoUnitario);
 
     if (produto.quantidade <= 5) {
       estoqueBaixo++;
     }
   });
 
-  document.getElementById("totalProdutos").textContent = totalProdutos;
+  document.getElementById("totalProdutos").textContent = produtos.length;
 
   document.getElementById("valorTotal").textContent = valorTotal.toLocaleString(
     "pt-BR",
@@ -53,6 +52,8 @@ function atualizarDashboard() {
   );
 
   document.getElementById("estoqueBaixo").textContent = estoqueBaixo;
+
+  carregarUltimasMovimentacoes();
 }
 
 atualizarDashboard();

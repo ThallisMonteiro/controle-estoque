@@ -15,37 +15,36 @@
       </div>
 
       <nav>
-  <ul>
-    <li>
-      <a href="index.html" >
-        <i data-lucide="layout-dashboard"></i>
-        <span class="link-text">Dashboard</span>
-      </a>
-    </li>
+        <ul>
+          <li>
+            <a href="index.html" class="ativo">
+              <i data-lucide="layout-dashboard"></i>
+              <span class="link-text">Dashboard</span>
+            </a>
+          </li>
 
-    <li>
-      <a href="produtos.html" class="ativo">
-        <i data-lucide="box"></i>
-        <span class="link-text">Produtos</span>
-      </a>
-    </li>
+          <li>
+            <a href="produtos.html">
+              <i data-lucide="box"></i>
+              <span class="link-text">Produtos</span>
+            </a>
+          </li>
 
-    <li>
-      <a href="movimentacoes.html">
-        <i data-lucide="arrow-left-right"></i>
-        <span class="link-text">Movimentações</span>
-      </a>
-    </li>
+          <li>
+            <a href="movimentacoes.html">
+              <i data-lucide="arrow-left-right"></i>
+              <span class="link-text">Movimentações</span>
+            </a>
+          </li>
 
-    <li>
-      <a href="relatorios.html">
-        <i data-lucide="bar-chart-3"></i>
-        <span class="link-text">Relatórios</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-
+          <li>
+            <a href="relatorios.html">
+              <i data-lucide="bar-chart-3"></i>
+              <span class="link-text">Relatórios</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <div class="main-content">
@@ -76,15 +75,18 @@
               <th>Produto</th>
               <th>Tipo</th>
               <th>Quantidade</th>
-              <th>Data</th>
+              <th>Data/Hora</th>
+              <th>Destino</th>
             </tr>
           </thead>
           <tbody id="tabelaMovimentacoes"></tbody>
         </table>
       </div>
-    </main>
+    </div>
 
     <script src="js/dashboard.js"></script>
-    <script>lucide.createIcons();</script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>

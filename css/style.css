@@ -285,3 +285,55 @@ select:focus {
     gap: 15px;
   }
 }
+
+.entrada {
+  color: rgb(38, 143, 38);
+  font-weight: bold;
+}
+
+.saida {
+  color: rgb(180, 57, 57);
+  font-weight: bold;
+}
+
+.tabela {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.tabela h2 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.tabela table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela thead {
+  background-color: #162032;
+}
+
+.tabela th {
+  text-align: left;
+  padding: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.tabela td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tabela tbody tr:hover {
+  background-color: var(--bg-hover);
+  transition: 0.2s;
+}

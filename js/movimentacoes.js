@@ -4,6 +4,7 @@ let movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
 const produtoSelect = document.getElementById("produtoSelect");
 const tipoSelect = document.getElementById("tipo");
 const quantidadeInput = document.getElementById("quantidadeMov");
+const destinoInput = document.getElementById("destino");
 const tabela = document.getElementById("tabelaMovimentacoes");
 const btnRegistrar = document.getElementById("registrarMov");
 
@@ -23,13 +24,14 @@ function renderizarMovimentacoes() {
 
   movimentacoes.forEach((mov) => {
     const linha = `
-      <tr>
-        <td>${mov.nome}</td>
-        <td>${mov.tipo}</td>
-        <td>${mov.quantidade}</td>
-        <td>${mov.data}</td>
-      </tr>
-    `;
+        <tr>
+          <td>${mov.nome}</td>
+          <td>${mov.tipo}</td>
+          <td>${mov.quantidade}</td>
+          <td>${mov.data}</td>
+          <td>${mov.destino || "-"}</td>
+        </tr>
+      `;
     tabela.innerHTML += linha;
   });
 }
@@ -38,6 +40,7 @@ btnRegistrar.addEventListener("click", () => {
   const produtoId = Number(produtoSelect.value);
   const tipo = tipoSelect.value;
   const quantidade = Number(quantidadeInput.value);
+  const destino = destinoInput.value;
 
   if (!quantidade || quantidade <= 0) {
     alert("Informe uma quantidade válida.");
@@ -46,7 +49,7 @@ btnRegistrar.addEventListener("click", () => {
 
   const produto = produtos.find((p) => p.id === produtoId);
 
-  if (tipo === "saida" && quantidade > produto.quantidade) {
+  if (tipo === "Saída" && quantidade > produto.quantidade) {
     alert("Estoque insuficiente.");
     return;
   }
@@ -61,6 +64,7 @@ btnRegistrar.addEventListener("click", () => {
     nome: produto.nome,
     tipo,
     quantidade,
+    destino,
     data: new Date().toLocaleString(),
   };
 
