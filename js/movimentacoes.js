@@ -7,6 +7,7 @@ const quantidadeInput = document.getElementById("quantidadeMov");
 const destinoInput = document.getElementById("destino");
 const tabela = document.getElementById("tabelaMovimentacoes");
 const btnRegistrar = document.getElementById("registrarMov");
+const btnLimpar = document.getElementById("limparMov");
 
 function carregarProdutos() {
   produtoSelect.innerHTML = "";
@@ -19,22 +20,42 @@ function carregarProdutos() {
   });
 }
 
+
 function renderizarMovimentacoes() {
   tabela.innerHTML = "";
 
   movimentacoes.forEach((mov) => {
+
+    const tipoFormatado =
+      mov.tipo.toLowerCase() === "saida" ? "Saída" : "Entrada";
+
+    const classeTipo =
+      mov.tipo.toLowerCase() === "entrada" ? "entrada" : "saida";
+
     const linha = `
-        <tr>
-          <td>${mov.nome}</td>
-          <td>${mov.tipo}</td>
-          <td>${mov.quantidade}</td>
-          <td>${mov.data}</td>
-          <td>${mov.destino || "-"}</td>
-        </tr>
-      `;
+      <tr>
+        <td>${mov.nome}</td>
+        <td class="${classeTipo}"> ${tipoFormatado}</td>
+        <td>${mov.quantidade}</td>
+        <td>${mov.data}</td>
+        <td>${mov.destino || "-"}</td>
+      </tr>
+    `;
+
     tabela.innerHTML += linha;
   });
 }
+
+btnLimpar.addEventListener("click", () => {
+  const confirmar = confirm("Tem certeza que deseja apagar todas as movimentações?");
+
+  if (!confirmar) return;
+
+  movimentacoes = [];
+  localStorage.setItem("movimentacoes", JSON.stringify(movimentacoes));
+
+  renderizarMovimentacoes();
+});
 
 btnRegistrar.addEventListener("click", () => {
   const produtoId = Number(produtoSelect.value);
@@ -78,6 +99,8 @@ btnRegistrar.addEventListener("click", () => {
 
   window.dispatchEvent(new Event("produtosAtualizados"));
 });
+
+
 
 carregarProdutos();
 renderizarMovimentacoes();

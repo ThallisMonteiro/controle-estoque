@@ -1,6 +1,6 @@
 let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
 let produtoEditando = null;
-const btnAdicionar = document.querySelector(".btn-primary");
+const btnAdicionar = document.getElementById("btnAddProduto");
 const formProduto = document.getElementById("formProduto");
 const btnSalvar = document.getElementById("salvarProduto");
 const tbody = document.querySelector(".tabela-produtos tbody");
@@ -8,6 +8,13 @@ const inputBusca = document.getElementById("buscarProduto");
 
 function removerAcentos(texto) {
   return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function formatarMoeda(valor) {
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 }
 
 function buscarProdutos() {
@@ -39,8 +46,8 @@ function renderizarProdutos(lista = produtos) {
         <td>${produto.nome}</td>
         <td>${produto.categoria}</td>
         <td>${produto.quantidade}</td>
-        <td>R$ ${produto.precoUnitario.toFixed(2)}</td>
-        <td>R$ ${precoTotal.toFixed(2)}</td>
+        <td>${formatarMoeda(produto.precoUnitario)}</td>
+        <td>${formatarMoeda(precoTotal)}</td>
         <td>
           <button class="btn-edit" onclick="editarProduto(${produto.id})">Editar</button>
           <button class="btn-delete" data-id="${produto.id}">Excluir</button>

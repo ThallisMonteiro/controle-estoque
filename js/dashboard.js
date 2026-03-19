@@ -5,7 +5,7 @@ function carregarUltimasMovimentacoes() {
 
   tabelaMovimentacoes.innerHTML = "";
 
-  const ultimas = movimentacoes.slice(-5).reverse();
+  const ultimas = movimentacoes.slice(-10).reverse();
 
   ultimas.forEach((mov) => {
     const linha = document.createElement("tr");
@@ -19,8 +19,6 @@ function carregarUltimasMovimentacoes() {
       <td>${mov.quantidade}</td>
       <td>${mov.data}</td>
       <td>${mov.destino || "-"}</td>
-
-      
     `;
 
     tabelaMovimentacoes.appendChild(linha);
