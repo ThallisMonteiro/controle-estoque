@@ -1,69 +1,65 @@
 # 📦 Sistema de Controle de Estoque
 
-Projeto desenvolvido com **HTML, CSS e JavaScript** com o objetivo de criar um sistema simples de controle de produtos e estoque.
+Projeto de um sistema de controle de estoque desenvolvido para prática de desenvolvimento web full stack.
 
-Este projeto está sendo desenvolvido como parte do meu aprendizado em **desenvolvimento web e lógica de programação**, e também para compor meu portfólio.
+Inicialmente criado com **HTML, CSS e JavaScript**, o projeto evoluiu para uma arquitetura com **API REST em Node.js e Express**, integrada a um banco de dados MySQL.
+
+---
+
+## 🚀 Tecnologias utilizadas
+
+### 🔹 Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+### 🔹 Backend
+- Node.js
+- Express
+
+### 🔹 Banco de Dados
+- MySQL
+
+---
+
+## 📌 Funcionalidades
+
+✔ Cadastro de produtos  
+✔ Listagem de produtos via API  
+✔ Atualização e exclusão de produtos (CRUD)  
+✔ Controle de estoque  
+✔ Registro de movimentações (entrada e saída)  
+✔ Integração entre frontend e backend via requisições HTTP  
+
+---
+
+## 🔗 API REST
+
+A aplicação conta com uma API REST com os seguintes endpoints:
+
+- `GET /api/produtos` → listar produtos  
+- `POST /api/produtos` → criar produto  
+- `PUT /api/produtos/:id` → atualizar produto  
+- `DELETE /api/produtos/:id` → remover produto  
+- `POST /api/movimentacoes` → registrar entrada/saída de estoque  
 
 ---
 
 ## 🚧 Status do Projeto
 
-⚠️ **Em desenvolvimento**
+⚠️ Em desenvolvimento
 
-Este projeto ainda está em construção e **deve passar por muitas alterações e melhorias** ao longo do tempo.
-
-Novas funcionalidades, melhorias de interface e otimizações de código serão adicionadas conforme o desenvolvimento continuar.
+O sistema continua em evolução, com melhorias constantes tanto no backend quanto no frontend.
 
 ---
 
 ## 🎯 Objetivo do Projeto
 
-Criar um sistema simples de controle de estoque que permita:
+Este projeto tem como objetivo:
 
-- cadastrar produtos
-- visualizar produtos em tabela
-- calcular automaticamente o valor total do estoque
-- remover produtos
-- visualizar informações no dashboard
-
-Além de servir como prática de:
-
-- manipulação do DOM
-- lógica com JavaScript
-- organização de código
-- versionamento com Git
-
----
-
-## 🛠️ Tecnologias utilizadas
-
-- HTML5
-- CSS3
-- JavaScript
-- LocalStorage para armazenamento de dados
-
----
-
-## 📌 Funcionalidades atuais
-
-✔ Cadastro de produtos  
-✔ Tabela de produtos  
-✔ Cálculo automático do preço total  
-✔ Exclusão de produtos  
-✔ Integração com dashboard  
-✔ Armazenamento local no navegador
-
----
-
-## 📈 Melhorias planejadas
-
-Algumas funcionalidades que pretendo adicionar futuramente:
-
-- edição de produtos
-- filtro e busca de produtos
-- categorias mais organizadas
-- melhoria no layout
-- dashboard mais completo
-- exportação de dados
-
+- praticar desenvolvimento backend com Node.js
+- entender a construção de APIs REST
+- integrar frontend com backend
+- trabalhar com banco de dados relacional
+- aplicar boas práticas de organização de código
 
