@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatórios - Estoque Inteligente</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <header class="sidebar">
+      <div class="logo_text">
+        <i data-lucide="warehouse" class="logo-icon"></i>
+        <span class="logo-full">Estoque Inteligente</span>
+      </div>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html">
+              <i data-lucide="layout-dashboard"></i>
+              <span class="link-text">Dashboard</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="produtos.html">
+              <i data-lucide="box"></i>
+              <span class="link-text">Produtos</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="movimentacoes.html">
+              <i data-lucide="arrow-left-right"></i>
+              <span class="link-text">Movimentações</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="relatorios.html" class="ativo">
+              <i data-lucide="bar-chart-3"></i>
+              <span class="link-text">Relatórios</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="main-content">
+      <div class="relatorios-header">
+        <h1>Relatórios</h1>
+        <button class="btn-export" id="exportarExcel">
+          <i data-lucide="download"></i>
+          Exportar para Excel
+        </button>
+      </div>
+
+      <!-- Abas de Relatórios -->
+      <div class="abas-relatorios">
+        <button class="aba-btn ativa" data-aba="produtos">
+          Relatório de Produtos
+        </button>
+        <button class="aba-btn" data-aba="movimentacoes">
+          Relatório de Movimentações
+        </button>
+        <button class="aba-btn" data-aba="estoque-baixo">
+          Produtos com Estoque Baixo
+        </button>
+      </div>
+
+      <!-- Relatório de Produtos -->
+      <div id="aba-produtos" class="aba-content ativa">
+        <div class="filtros-container">
+          <h3>Filtros</h3>
+          <div class="filtros-grid">
+            <div class="filtro-item">
+              <label for="filtroCategoriaProdutos">Categoria:</label>
+              <select id="filtroCategoriaProdutos">
+                <option value="">Todas as categorias</option>
+              </select>
+            </div>
+
+            <div class="filtro-item">
+              <label for="filtroEstoqueProdutos">Status do Estoque:</label>
+              <select id="filtroEstoqueProdutos">
+                <option value="">Todos</option>
+                <option value="baixo">Estoque Baixo</option>
+                <option value="normal">Estoque Normal</option>
+                <option value="alto">Estoque Alto</option>
+              </select>
+            </div>
+
+            <div class="filtro-item">
+              <label for="buscarProdutoRel">Buscar produto:</label>
+              <input 
+                type="text" 
+                id="buscarProdutoRel" 
+                placeholder="Digite o nome do produto..."
+              />
+            </div>
+
+            <button class="btn-filtrar" onclick="aplicarFiltrosProdutos()">
+              Aplicar Filtros
+            </button>
+            <button class="btn-limpar" onclick="limparFiltrosProdutos()">
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="tabela">
+          <h2>Produtos</h2>
+          <div class="tabela-stats">
+            <span>Total de produtos: <strong id="totalProdutosRel">0</strong></span>
+            <span>Valor total: <strong id="valorTotalRel">R$ 0,00</strong></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Valor Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaProdutosRel"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Relatório de Movimentações -->
+      <div id="aba-movimentacoes" class="aba-content">
+        <div class="filtros-container">
+          <h3>Filtros</h3>
+          <div class="filtros-grid">
+            <div class="filtro-item">
+              <label for="filtroTipoMovimentacao">Tipo de Movimentação:</label>
+              <select id="filtroTipoMovimentacao">
+                <option value="">Todos os tipos</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Saída">Saída</option>
+              </select>
+            </div>
+
+            <div class="filtro-item">
+              <label for="filtroDataInicio">Data Início:</label>
+              <input type="date" id="filtroDataInicio" />
+            </div>
+
+            <div class="filtro-item">
+              <label for="filtroDataFim">Data Fim:</label>
+              <input type="date" id="filtroDataFim" />
+            </div>
+
+            <div class="filtro-item">
+              <label for="filtroProdutoMov">Produto:</label>
+              <select id="filtroProdutoMov">
+                <option value="">Todos os produtos</option>
+              </select>
+            </div>
+
+            <button class="btn-filtrar" onclick="aplicarFiltrosMovimentacoes()">
+              Aplicar Filtros
+            </button>
+            <button class="btn-limpar" onclick="limparFiltrosMovimentacoes()">
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="tabela">
+          <h2>Movimentações</h2>
+          <div class="tabela-stats">
+            <span>Total de movimentações: <strong id="totalMovRel">0</strong></span>
+            <span>Total entrada: <strong id="totalEntradaRel">0</strong></span>
+            <span>Total saída: <strong id="totalSaidaRel">0</strong></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Tipo</th>
+                <th>Quantidade</th>
+                <th>Data/Hora</th>
+                <th>Destino</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaMovimentacoesRel"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Relatório de Estoque Baixo -->
+      <div id="aba-estoque-baixo" class="aba-content">
+        <div class="filtros-container">
+          <h3>Filtros</h3>
+          <div class="filtros-grid">
+            <div class="filtro-item">
+              <label for="filtroLimiteBaixo">Limite de Estoque Baixo:</label>
+              <input 
+                type="number" 
+                id="filtroLimiteBaixo" 
+                value="5" 
+                min="1"
+              />
+            </div>
+
+            <div class="filtro-item">
+              <label for="filtoCategoriaEstoqueBaixo">Categoria:</label>
+              <select id="filtoCategoriaEstoqueBaixo">
+                <option value="">Todas as categorias</option>
+              </select>
+            </div>
+
+            <button class="btn-filtrar" onclick="aplicarFiltrosEstoqueBaixo()">
+              Aplicar Filtros
+            </button>
+            <button class="btn-limpar" onclick="limparFiltrosEstoqueBaixo()">
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="tabela">
+          <h2>Produtos com Estoque Baixo</h2>
+          <div class="tabela-stats">
+            <span>Total de produtos com estoque baixo: <strong id="totalEstoqueBaixoRel">0</strong></span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Prioridade</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaEstoqueBaixoRel"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/relatorios.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
