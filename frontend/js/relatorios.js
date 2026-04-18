@@ -20,10 +20,11 @@ abaBtns.forEach((btn) => {
 
 // Exportar para Excel
 exportarBtn.addEventListener("click", () => {
-  const abaAtiva = document.querySelector(".aba-content.ativa").id;
-  const tipoRelatorio = abaAtiva.replace("aba-", "");
-  // Lógica de exportação será implementada aqui
-  alert(`Exportação de ${tipoRelatorio} para Excel será implementada`);
+  if (typeof XLSX === "undefined") {
+    alert("Erro: Biblioteca XLSX não carregou. Por favor, recarregue a página.");
+    return;
+  }
+  exportarParaExcel();
 });
 
 function mudarAba(abaName) {
@@ -359,6 +360,127 @@ function formatarMoeda(valor) {
     style: "currency",
     currency: "BRL",
   });
+}
+
+// ========== EXPORTAÇÃO PARA EXCEL ==========
+
+function exportarParaExcel() {
+  const abaAtiva = document.querySelector(".aba-content.ativa").id;
+  const tipoRelatorio = abaAtiva.replace("aba-", "");
+  let dados = [];
+  let nomeArquivo = "";
+  let nomeAba = "";
+  
+  if (tipoRelatorio === "produtos") {
+    dados = extrairDadosProdutos();
+    nomeArquivo = "Relatório-Produtos";
+    nomeAba = "Produtos";
+  } else if (tipoRelatorio === "movimentacoes") {
+    dados = extrairDadosMovimentacoes();
+    nomeArquivo = "Relatório-Movimentações";
+    nomeAba = "Movimentações";
+  } else if (tipoRelatorio === "estoque-baixo") {
+    dados = extrairDadosEstoqueBaixo();
+    nomeArquivo = "Relatório-Estoque-Baixo";
+    nomeAba = "Estoque Baixo";
+  }
+  
+  if (dados.length === 0) return;
+  
+  // Criar workbook com SheetJS
+  const worksheet = XLSX.utils.json_to_sheet(dados);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, nomeAba);
+  
+  // Ajustar largura das colunas
+  const colWidths = calcularLarguraColunas(dados);
+  worksheet["!cols"] = colWidths;
+  
+  // Gerar nome do arquivo com data
+  const agora = new Date();
+  const dataFormatada = agora.toLocaleDateString("pt-BR").replace(/\//g, "-");
+  const nomeComData = `${nomeArquivo}_${dataFormatada}.xlsx`;
+  
+  // Fazer download
+  XLSX.writeFile(workbook, nomeComData);
+}
+
+function extrairDadosProdutos() {
+  const tabela = document.getElementById("tabelaProdutosRel");
+  const linhas = tabela.querySelectorAll("tr");
+  const dados = [];
+  
+  linhas.forEach((linha, index) => {
+    const colunas = linha.querySelectorAll("td");
+    if (colunas.length > 0) {
+      dados.push({
+        ID: colunas[0].textContent.trim(),
+        "Nome": colunas[1].textContent.trim(),
+        "Categoria": colunas[2].textContent.trim(),
+        "Quantidade": colunas[3].textContent.trim(),
+        "Preço Unitário": colunas[4].textContent.trim(),
+        "Preço Total": colunas[5].textContent.trim(),
+        "Status": colunas[6].textContent.trim(),
+      });
+    }
+  });
+  
+  return dados;
+}
+
+function extrairDadosMovimentacoes() {
+  const tabela = document.getElementById("tabelaMovimentacoesRel");
+  const linhas = tabela.querySelectorAll("tr");
+  const dados = [];
+  
+  linhas.forEach((linha, index) => {
+    const colunas = linha.querySelectorAll("td");
+    if (colunas.length > 0) {
+      dados.push({
+        "Produto": colunas[0].textContent.trim(),
+        "Tipo": colunas[1].textContent.trim(),
+        "Quantidade": colunas[2].textContent.trim(),
+        "Data/Hora": colunas[3].textContent.trim(),
+        "Destino": colunas[4].textContent.trim(),
+      });
+    }
+  });
+  
+  return dados;
+}
+
+function extrairDadosEstoqueBaixo() {
+  const tabela = document.getElementById("tabelaEstoqueBaixoRel");
+  const linhas = tabela.querySelectorAll("tr");
+  const dados = [];
+  
+  linhas.forEach((linha, index) => {
+    const colunas = linha.querySelectorAll("td");
+    if (colunas.length > 0) {
+      dados.push({
+        "ID": colunas[0].textContent.trim(),
+        "Nome": colunas[1].textContent.trim(),
+        "Categoria": colunas[2].textContent.trim(),
+        "Quantidade": colunas[3].textContent.trim(),
+        "Preço Unitário": colunas[4].textContent.trim(),
+        "Prioridade": colunas[5].textContent.trim(),
+      });
+    }
+  });
+  
+  return dados;
+}
+
+function calcularLarguraColunas(dados) {
+  if (dados.length === 0) return [];
+  
+  const colunas = Object.keys(dados[0]);
+  return colunas.map(col => ({
+    wch: Math.max(
+      col.length,
+      Math.max(...dados.map(d => String(d[col]).length))
+    ) + 2
+  }));
 }
 
 // Carregar relatório de produtos ao iniciar

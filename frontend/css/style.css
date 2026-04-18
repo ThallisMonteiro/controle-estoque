@@ -364,7 +364,7 @@ select:focus {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 350px;
+  min-height: 175px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
 }
@@ -398,7 +398,7 @@ select:focus {
   }
   
   .grafico-box {
-    min-height: 300px;
+    min-height: 150px;
   }
 }
 
