@@ -27,10 +27,10 @@ function renderizarMovimentacoes() {
   movimentacoes.forEach((mov) => {
 
     const tipoFormatado =
-      mov.tipo.toLowerCase() === "saida" ? "Saída" : "Entrada";
+      mov.tipo === "Saída" ? "Saída" : "Entrada";
 
     const classeTipo =
-      mov.tipo.toLowerCase() === "entrada" ? "entrada" : "saida";
+      mov.tipo === "Entrada" ? "entrada" : "saida";
 
     const linha = `
       <tr>
@@ -75,7 +75,7 @@ btnRegistrar.addEventListener("click", () => {
     return;
   }
 
-  if (tipo === "entrada") {
+  if (tipo === "Entrada") {
     produto.quantidade += quantidade;
   } else {
     produto.quantidade -= quantidade;

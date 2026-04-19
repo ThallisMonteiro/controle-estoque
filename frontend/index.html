@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" />
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <header class="sidebar">
@@ -64,6 +65,38 @@
         <div class="card alerta">
           <h3>Produtos com Estoque Baixo</h3>
           <p id="estoqueBaixo">0</p>
+        </div>
+      </div>
+
+      <div class="graficos-container">
+        <div class="grafico-item">
+          <div class="grafico-box">
+            <h2>Produtos por Categoria</h2>
+            <canvas id="graficoCategorias"></canvas>
+          </div>
+        </div>
+
+        <div class="grafico-item">
+          <div class="grafico-box">
+            <h2>Movimentações (Entrada vs Saída)</h2>
+            <canvas id="graficoMovimentacoes"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="graficos-container">
+        <div class="grafico-item">
+          <div class="grafico-box">
+            <h2>Produtos Mais Movimentados</h2>
+            <canvas id="graficoProdutosMostrados"></canvas>
+          </div>
+        </div>
+
+        <div class="grafico-item">
+          <div class="grafico-box">
+            <h2>Evolução do Estoque (Últimos 30 dias)</h2>
+            <canvas id="graficoEvolucao"></canvas>
+          </div>
         </div>
       </div>
 
