@@ -2,7 +2,8 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <title>Produtos - Controle de Estoque</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produtos - Estoque Inteligente</title>
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
   </head>
@@ -11,24 +12,31 @@
     <div class="main-content">
       <div class="page-header">
         <h1>Gestão de Estoque</h1>
+      </div>
 
-        <div class="form-produto" id="formProduto" style="display: none">
-          <h3>Novo Produto</h3>
+      <div class="form-produto" id="formProduto" style="display: none">
+        <h3>Novo Produto</h3>
 
-          <input type="text" id="nome" placeholder="Nome do Produto" />
-          <select id="categoria">
-            <option value="">Selecione uma categoria</option>
-          </select>
-          <input type="number" id="quantidade" placeholder="Quantidade" />
-          <input type="number" id="precoUnitario" placeholder="Preço Unitário"/>
-          <button id="salvarProduto" class="btn-primary">Salvar</button>
+        <input type="text" id="nome" placeholder="Nome do Produto" />
+        <select id="categoria">
+          <option value="">Selecione uma categoria</option>
+        </select>
+        <input type="number" id="quantidade" placeholder="Quantidade" />
+        <input type="number" id="precoUnitario" placeholder="Preço Unitário"/>
+        <button id="salvarProduto" class="btn-primary">Salvar</button>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="buscarProduto" placeholder="Buscar produto..."/>
+        <button id="btnAddProduto" class="btn-primary">+ Adicionar Produto</button>
+      </div>
+
+      <div class="tabela">
+        <h2>Produtos</h2>
+        <div class="tabela-stats">
+          <span>Total de produtos: <strong id="totalProdutosGerenciados">0</strong></span>
+          <span>Valor total: <strong id="valorTotalProdutos">R$ 0,00</strong></span>
         </div>
-
-        <div class="search-box">
-          <input type="text" id="buscarProduto" placeholder="Buscar produto..."/>
-          <button id="btnAddProduto" class="btn-primary">+ Adicionar Produto</button>
-        </div>
-
         <table class="tabela-produtos">
           <thead>
             <tr>

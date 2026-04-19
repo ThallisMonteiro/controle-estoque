@@ -2,14 +2,17 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <title>Controle de Estoque</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Estoque Inteligente</title>
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="main-content">
-      <h1>Dashboard</h1>
+      <div class="page-header">
+        <h1>Dashboard</h1>
+      </div>
 
       <div class="cards-container">
         <div class="card">
@@ -32,36 +35,45 @@
         <div class="grafico-item">
           <div class="grafico-box">
             <h2>Produtos por Categoria</h2>
-            <canvas id="graficoCategorias"></canvas>
+            <div class="grafico-wrapper">
+              <canvas id="graficoCategorias"></canvas>
+            </div>
           </div>
         </div>
 
         <div class="grafico-item">
           <div class="grafico-box">
             <h2>Movimentações (Entrada vs Saída)</h2>
-            <canvas id="graficoMovimentacoes"></canvas>
+            <div class="grafico-wrapper">
+              <canvas id="graficoMovimentacoes"></canvas>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="graficos-container">
         <div class="grafico-item">
           <div class="grafico-box">
             <h2>Produtos Mais Movimentados</h2>
-            <canvas id="graficoProdutosMostrados"></canvas>
+            <div class="grafico-wrapper">
+              <canvas id="graficoProdutosMostrados"></canvas>
+            </div>
           </div>
         </div>
 
         <div class="grafico-item">
           <div class="grafico-box">
             <h2>Evolução do Estoque (Últimos 30 dias)</h2>
-            <canvas id="graficoEvolucao"></canvas>
+            <div class="grafico-wrapper">
+              <canvas id="graficoEvolucao"></canvas>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="tabela">
         <h2>Últimas Movimentações</h2>
+        <div class="tabela-stats">
+          <span>Total de movimentações: <strong id="totalMovimentacoes">0</strong></span>
+        </div>
         <table>
           <thead>
             <tr>

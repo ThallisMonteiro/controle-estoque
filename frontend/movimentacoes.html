@@ -2,16 +2,13 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movimentações - Estoque Inteligente</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
+    <script src="https://unpkg.com/lucide@latest"></script>
   </head>
 
   <body>
-
     <main class="main-content">
       <div class="page-header">
         <h1>Movimentações de Produtos</h1>
@@ -31,23 +28,30 @@
         <button id="limparMov" class="btn-delete"> Limpar Movimentações </button>
       </div>
 
-      <table class="tabela-produtos">
-        <thead>
-          <tr>
-            <th>Produto</th>
-            <th>Tipo</th>
-            <th>Quantidade</th>
-            <th>Data/Hora</th>
-            <th>Destino</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaMovimentacoes"></tbody>
-      </table>
+      <div class="tabela">
+        <h2>Movimentações</h2>
+        <div class="tabela-stats">
+          <span>Total de movimentações: <strong id="totalMovimentacoesList">0</strong></span>
+          <span>Entradas: <strong id="totalEntradas">0</strong></span>
+          <span>Saídas: <strong id="totalSaidas">0</strong></span>
+        </div>
+        <table class="tabela-produtos">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Tipo</th>
+              <th>Quantidade</th>
+              <th>Data/Hora</th>
+              <th>Destino</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaMovimentacoes"></tbody>
+        </table>
+      </div>
     </main>
 
     <script src="js/sidebar.js"></script>
     <script src="js/movimentacoes.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
       lucide.createIcons();
     </script>
