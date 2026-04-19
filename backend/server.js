@@ -10,6 +10,7 @@ app.use(express.json());
 app.use('/api/categorias',     require('./routes/categorias'));
 app.use('/api/produtos',       require('./routes/produtos'));
 app.use('/api/movimentacoes',  require('./routes/movimentacoes'));
+app.use('/api/usuarios',       require('./routes/usuarios'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
