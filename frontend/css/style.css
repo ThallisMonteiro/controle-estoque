@@ -111,26 +111,67 @@ body {
   align-items: center;
   justify-content: center;
   gap: 15px;
-  padding: 15px 0;
+  padding: 16px;
+  height: 56px;
   color: #cbd5e1;
   text-decoration: none;
-  transition: background 0.8s, color 0.2s;
+  transition: background 0.8s ease, color 0.2s ease, border-left 0.3s ease;
   width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+  border: none;
+  outline: none;
 }
 
 .sidebar nav ul li a:hover {
-  background-color: #334155;
+  background-color: #475569;
   color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
 .ativo {
   background-color: #3b82f6;
   color: white !important;
+  position: relative;
+  font-weight: 600;
+  border-left: 4px solid #60a5fa;
+  padding-left: 16px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.ativo::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent #3b82f6 transparent transparent;
+  opacity: 0;
+}
+
+.sidebar:not(:hover) .ativo {
+  border-radius: 8px;
+  margin: 0 8px;
+  padding: 15px 0;
+  border-left: none;
+}
+
+.sidebar:hover .ativo {
+  border-left: 4px solid #60a5fa;
+  padding-left: 20px;
 }
 
 .sidebar nav ul li a i {
-  min-width: 24px;
-  font-size: 20px;
+  min-width: 28px;
+  font-size: 24px;
+  transition: transform 0.2s ease;
 }
 
 .link-text {
