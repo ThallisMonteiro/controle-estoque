@@ -25,6 +25,16 @@ async function carregarCategorias() {
     const response = await fetch(`${API_URL}/categorias`);
     if (!response.ok) throw new Error('Erro ao carregar categorias');
     categorias = await response.json();
+    
+    const selectCategoria = document.getElementById("categoria");
+    selectCategoria.innerHTML = '<option value="">Selecione uma categoria</option>';
+    
+    categorias.forEach((cat) => {
+      const option = document.createElement("option");
+      option.value = cat.id;
+      option.textContent = cat.nome;
+      selectCategoria.appendChild(option);
+    });
   } catch (error) {
     console.error('Erro:', error);
   }
@@ -132,7 +142,7 @@ btnSalvar.addEventListener("click", async () => {
   const quantidade = parseInt(document.getElementById("quantidade").value);
   const preco = parseFloat(document.getElementById("precoUnitario").value);
 
-  if (!nome || !quantidade || !preco) {
+  if (!nome || !categoria_id || !quantidade || !preco) {
     alert("Preencha todos os campos obrigatórios!");
     return;
   }
@@ -146,7 +156,7 @@ btnSalvar.addEventListener("click", async () => {
           nome,
           quantidade,
           preco,
-          categoria_id: categoria_id ? parseInt(categoria_id) : null
+          categoria_id: parseInt(categoria_id)
         })
       });
 
@@ -165,7 +175,7 @@ btnSalvar.addEventListener("click", async () => {
           nome,
           quantidade,
           preco,
-          categoria_id: categoria_id ? parseInt(categoria_id) : null
+          categoria_id: parseInt(categoria_id)
         })
       });
 
