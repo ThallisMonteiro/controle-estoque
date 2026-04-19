@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Estoque Inteligente</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+
+  <body class="auth-body">
+    <div class="auth-container">
+      <div class="auth-card">
+        <!-- Logo -->
+        <div class="auth-logo">
+          <img src="logo.png" alt="Logo" class="logo-auth">
+          <h1>Estoque<br>Inteligente</h1>
+        </div>
+
+        <!-- Tab de Login -->
+        <div class="auth-tabs">
+          <button class="tab-btn ativa" id="tabLogin" data-tab="login">
+            <i data-lucide="log-in"></i>
+            Entrar
+          </button>
+          <button class="tab-btn" id="tabRegistro" data-tab="registro">
+            <i data-lucide="user-plus"></i>
+            Cadastro
+          </button>
+        </div>
+
+        <!-- Formulário Login -->
+        <form id="formLogin" class="auth-form ativa">
+          <h2>Bem-vindo de volta!</h2>
+          
+          <div class="form-group">
+            <label for="loginEmail">Email:</label>
+            <input 
+              type="email" 
+              id="loginEmail" 
+              placeholder="seu@email.com" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="loginSenha">Senha:</label>
+            <input 
+              type="password" 
+              id="loginSenha" 
+              placeholder="Sua senha" 
+              required 
+            />
+          </div>
+
+          <div class="form-group checkbox">
+            <input type="checkbox" id="lembrarMe" />
+            <label for="lembrarMe">Lembrar-me</label>
+          </div>
+
+          <button type="submit" class="btn-primary btn-auth">
+            <i data-lucide="log-in"></i>
+            Entrar
+          </button>
+
+          <p class="auth-link">
+            Não tem conta? 
+            <a href="#" class="tab-btn-link" id="linkRegistro">Cadastre-se aqui</a>
+          </p>
+        </form>
+
+        <!-- Formulário Registro -->
+        <form id="formRegistro" class="auth-form">
+          <h2>Criar Conta</h2>
+          
+          <div class="form-group">
+            <label for="registroNome">Nome Completo:</label>
+            <input 
+              type="text" 
+              id="registroNome" 
+              placeholder="Seu nome completo" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="registroEmail">Email:</label>
+            <input 
+              type="email" 
+              id="registroEmail" 
+              placeholder="seu@email.com" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="registroSenha">Senha:</label>
+            <input 
+              type="password" 
+              id="registroSenha" 
+              placeholder="Mínimo 6 caracteres" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="registroConfirmarSenha">Confirmar Senha:</label>
+            <input 
+              type="password" 
+              id="registroConfirmarSenha" 
+              placeholder="Repita a senha" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="registroRole">Tipo de Conta:</label>
+            <select id="registroRole" required>
+              <option value="usuario">Usuário Comum</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-primary btn-auth">
+            <i data-lucide="user-plus"></i>
+            Criar Conta
+          </button>
+
+          <p class="auth-link">
+            Já tem conta? 
+            <a href="#" class="tab-btn-link" id="linkLogin">Faça login</a>
+          </p>
+        </form>
+
+        <!-- Mensagens de Feedback -->
+        <div id="mensagem" class="auth-mensagem" style="display: none;"></div>
+      </div>
+
+      <!-- Background Decorativo -->
+      <div class="auth-background">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

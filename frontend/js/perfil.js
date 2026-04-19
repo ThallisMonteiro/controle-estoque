@@ -1,3 +1,6 @@
+// Verificar autenticação
+verificarAutenticacao();
+
 const API_URL = 'http://localhost:3000/api';
 
 let usuarioAtual = null;

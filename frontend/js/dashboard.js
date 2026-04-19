@@ -1,5 +1,14 @@
 const API_URL = 'http://localhost:3000/api';
 
+// Verificar autenticação
+window.addEventListener('load', () => {
+  const usuarioLogado = localStorage.getItem('usuarioLogado');
+  if (!usuarioLogado) {
+    window.location.href = 'login.html';
+    return;
+  }
+});
+
 const tabelaMovimentacoes = document.getElementById("tabelaMovimentacoes");
 
 // Cores para os gráficos
