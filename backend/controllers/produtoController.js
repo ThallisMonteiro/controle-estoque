@@ -1,42 +1,56 @@
-const db = require('../db');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 exports.listar = async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM produtos');
-    res.json(rows);
+    const produtos = await prisma.produto.findMany({
+      include: { categoria: true }
+    });
+    res.json(produtos);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 exports.criar = async (req, res) => {
   try {
-    const { nome, quantidade, preco } = req.body;
+    const { nome, quantidade, preco, categoria_id } = req.body;
 
-    await db.query(
-      'INSERT INTO produtos (nome, quantidade, preco) VALUES (?, ?, ?)',
-      [nome, quantidade, preco]
-    );
+    const produto = await prisma.produto.create({
+      data: {
+        nome,
+        quantidade: parseInt(quantidade),
+        preco: parseFloat(preco),
+        categoria_id: categoria_id ? parseInt(categoria_id) : null
+      },
+      include: { categoria: true }
+    });
 
-    res.json({ message: 'Produto criado!' });
+    res.json({ message: 'Produto criado!', produto });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
 exports.atualizar = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nome, quantidade, preco } = req.body;
+    const { nome, quantidade, preco, categoria_id } = req.body;
 
-    await db.query(
-      'UPDATE produtos SET nome=?, quantidade=?, preco=? WHERE id=?',
-      [nome, quantidade, preco, id]
-    );
+    const produto = await prisma.produto.update({
+      where: { id: parseInt(id) },
+      data: {
+        nome,
+        quantidade: parseInt(quantidade),
+        preco: parseFloat(preco),
+        categoria_id: categoria_id ? parseInt(categoria_id) : null
+      },
+      include: { categoria: true }
+    });
 
-    res.json({ message: 'Produto atualizado!' });
+    res.json({ message: 'Produto atualizado!', produto });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -44,10 +58,12 @@ exports.deletar = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await db.query('DELETE FROM produtos WHERE id=?', [id]);
+    await prisma.produto.delete({
+      where: { id: parseInt(id) }
+    });
 
     res.json({ message: 'Produto deletado!' });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 };
