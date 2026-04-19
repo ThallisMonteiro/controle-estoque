@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:3000/api';
+
 const tabelaMovimentacoes = document.getElementById("tabelaMovimentacoes");
 
 // Cores para os gráficos
@@ -21,8 +23,30 @@ let charts = {
   evolucao: null,
 };
 
-function carregarUltimasMovimentacoes() {
-  const movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+async function carregarDados() {
+  try {
+    const [resProdutos, resMovimentacoes] = await Promise.all([
+      fetch(`${API_URL}/produtos`),
+      fetch(`${API_URL}/movimentacoes`)
+    ]);
+
+    if (!resProdutos.ok || !resMovimentacoes.ok) {
+      throw new Error('Erro ao carregar dados');
+    }
+
+    const produtos = await resProdutos.json();
+    const movimentacoes = await resMovimentacoes.json();
+    
+    return { produtos, movimentacoes };
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    alert('Erro ao carregar dados do servidor');
+    return { produtos: [], movimentacoes: [] };
+  }
+}
+
+async function carregarUltimasMovimentacoes() {
+  const { movimentacoes } = await carregarDados();
 
   tabelaMovimentacoes.innerHTML = "";
 
@@ -31,32 +55,34 @@ function carregarUltimasMovimentacoes() {
   ultimas.forEach((mov) => {
     const linha = document.createElement("tr");
 
-    const tipoFormatado =
-      mov.tipo === "Saída" ? "Saída" : "Entrada";
+    const tipoFormatado = mov.tipo === "saida" ? "Saída" : "Entrada";
+    const nomeProduto = mov.produto?.nome || "Produto não encontrado";
+    const dataFormatada = new Date(mov.criado_em).toLocaleString('pt-BR');
 
     linha.innerHTML = `
-      <td>${mov.nome}</td>
-      <td class="${mov.tipo === "Entrada" ? "entrada" : "saida"}">${tipoFormatado}</td>
+      <td>${nomeProduto}</td>
+      <td class="${mov.tipo === "entrada" ? "entrada" : "saida"}">${tipoFormatado}</td>
       <td>${mov.quantidade}</td>
-      <td>${mov.data}</td>
-      <td>${mov.destino || "-"}</td>
+      <td>${dataFormatada}</td>
+      <td>-</td>
     `;
 
     tabelaMovimentacoes.appendChild(linha);
   });
 }
 
-function criarGraficoCategorias() {
-  const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+async function criarGraficoCategorias() {
+  const { produtos } = await carregarDados();
   const contexto = document.getElementById("graficoCategorias");
 
   // Agrupar por categoria
   const categorias = {};
   produtos.forEach((produto) => {
-    if (!categorias[produto.categoria]) {
-      categorias[produto.categoria] = 0;
+    const categoriaNome = produto.categoria?.nome || "Sem categoria";
+    if (!categorias[categoriaNome]) {
+      categorias[categoriaNome] = 0;
     }
-    categorias[produto.categoria]++;
+    categorias[categoriaNome]++;
   });
 
   const labels = Object.keys(categorias);
@@ -96,15 +122,15 @@ function criarGraficoCategorias() {
   });
 }
 
-function criarGraficoMovimentacoes() {
-  const movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+async function criarGraficoMovimentacoes() {
+  const { movimentacoes } = await carregarDados();
   const contexto = document.getElementById("graficoMovimentacoes");
 
   let entrada = 0;
   let saida = 0;
 
   movimentacoes.forEach((mov) => {
-    if (mov.tipo === "Entrada") {
+    if (mov.tipo === "entrada") {
       entrada += mov.quantidade;
     } else {
       saida += mov.quantidade;
@@ -151,17 +177,18 @@ function criarGraficoMovimentacoes() {
   });
 }
 
-function criarGraficoProdutosMostrados() {
-  const movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+async function criarGraficoProdutosMostrados() {
+  const { movimentacoes } = await carregarDados();
   const contexto = document.getElementById("graficoProdutosMostrados");
 
   // Contar movimentações por produto
   const produtosCount = {};
   movimentacoes.forEach((mov) => {
-    if (!produtosCount[mov.nome]) {
-      produtosCount[mov.nome] = 0;
+    const nomeProduto = mov.produto?.nome || "Produto desconhecido";
+    if (!produtosCount[nomeProduto]) {
+      produtosCount[nomeProduto] = 0;
     }
-    produtosCount[mov.nome] += mov.quantidade;
+    produtosCount[nomeProduto] += mov.quantidade;
   });
 
   // Ordenar e pegar top 5
@@ -213,8 +240,8 @@ function criarGraficoProdutosMostrados() {
   });
 }
 
-function criarGraficoEvolucao() {
-  const movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+async function criarGraficoEvolucao() {
+  const { produtos } = await carregarDados();
   const contexto = document.getElementById("graficoEvolucao");
 
   // Criar array de últimos 30 dias
@@ -227,10 +254,11 @@ function criarGraficoEvolucao() {
     ultimos30Dias.push(data.toLocaleDateString("pt-BR"));
   }
 
-  // Simular evolução do estoque por dia
+  // Calcular estoque total por dia (evolução simulada com dados reais)
   const dados = ultimos30Dias.map((dia, index) => {
-    // Simular variação do estoque
-    const baseValue = 500;
+    // Usar estoque atual como base e simular variação realista
+    const estoqueTotal = produtos.reduce((acc, p) => acc + p.quantidade, 0);
+    const baseValue = estoqueTotal || 500;
     const variacao = Math.sin(index / 5) * 100 + Math.random() * 50;
     return Math.max(100, baseValue + variacao);
   });
@@ -289,14 +317,14 @@ function criarGraficoEvolucao() {
   });
 }
 
-function atualizarDashboard() {
-  const produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+async function atualizarDashboard() {
+  const { produtos } = await carregarDados();
 
   let valorTotal = 0;
   let estoqueBaixo = 0;
 
   produtos.forEach((produto) => {
-    valorTotal += Number(produto.quantidade) * Number(produto.precoUnitario);
+    valorTotal += produto.quantidade * parseFloat(produto.preco);
 
     if (produto.quantidade <= 5) {
       estoqueBaixo++;
@@ -315,13 +343,13 @@ function atualizarDashboard() {
 
   document.getElementById("estoqueBaixo").textContent = estoqueBaixo;
 
-  carregarUltimasMovimentacoes();
+  await carregarUltimasMovimentacoes();
 
   // Criar gráficos
-  criarGraficoCategorias();
-  criarGraficoMovimentacoes();
-  criarGraficoProdutosMostrados();
-  criarGraficoEvolucao();
+  await criarGraficoCategorias();
+  await criarGraficoMovimentacoes();
+  await criarGraficoProdutosMostrados();
+  await criarGraficoEvolucao();
 }
 
 atualizarDashboard();
