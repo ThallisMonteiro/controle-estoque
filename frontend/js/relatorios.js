@@ -1,6 +1,8 @@
-// Dados do localStorage
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-let movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+const API_URL = 'http://localhost:3000/api';
+
+// Dados da API
+let produtos = [];
+let movimentacoes = [];
 
 // Elementos DOM
 const tabelaProdutosRel = document.getElementById("tabelaProdutosRel");
@@ -9,6 +11,25 @@ const tabelaEstoqueBaixoRel = document.getElementById("tabelaEstoqueBaixoRel");
 const abaBtns = document.querySelectorAll(".aba-btn");
 const abaContents = document.querySelectorAll(".aba-content");
 const exportarBtn = document.getElementById("exportarExcel");
+
+async function carregarDados() {
+  try {
+    const [resProdutos, resMovimentacoes] = await Promise.all([
+      fetch(`${API_URL}/produtos`),
+      fetch(`${API_URL}/movimentacoes`)
+    ]);
+
+    if (!resProdutos.ok || !resMovimentacoes.ok) {
+      throw new Error('Erro ao carregar dados');
+    }
+
+    produtos = await resProdutos.json();
+    movimentacoes = await resMovimentacoes.json();
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    alert('Erro ao carregar dados do servidor');
+  }
+}
 
 // Evento de troca de abas
 abaBtns.forEach((btn) => {
@@ -55,7 +76,7 @@ function popularFiltrosCategorias() {
   const filtroCategoriaEstoqueBaixo = document.getElementById(
     "filtoCategoriaEstoqueBaixo"
   );
-  const categorias = [...new Set(produtos.map((p) => p.categoria))];
+  const categorias = [...new Set(produtos.map((p) => p.categoria?.nome).filter(Boolean))];
 
   [filtroCategoria, filtroCategoriaEstoqueBaixo].forEach((select) => {
     const opcoes = select.querySelectorAll("option:not(:first-child)");
@@ -95,7 +116,8 @@ function renderizarTabelaProdutos(lista = produtos) {
   tabelaProdutosRel.innerHTML = "";
 
   lista.forEach((produto) => {
-    const precoTotal = produto.quantidade * produto.precoUnitario;
+    const precoTotal = produto.quantidade * parseFloat(produto.preco);
+    const categoriaNome = produto.categoria?.nome || "Sem categoria";
     const status = produto.quantidade <= 5 ? "⚠ Baixo" : "✓ Normal";
     const classStatus = produto.quantidade <= 5 ? "alerta" : "";
 
@@ -103,9 +125,9 @@ function renderizarTabelaProdutos(lista = produtos) {
     linha.innerHTML = `
       <td>${produto.id}</td>
       <td>${produto.nome}</td>
-      <td>${produto.categoria}</td>
+      <td>${categoriaNome}</td>
       <td>${produto.quantidade}</td>
-      <td>${formatarMoeda(produto.precoUnitario)}</td>
+      <td>${formatarMoeda(parseFloat(produto.preco))}</td>
       <td>${formatarMoeda(precoTotal)}</td>
       <td class="${classStatus}">${status}</td>
     `;
@@ -116,7 +138,7 @@ function renderizarTabelaProdutos(lista = produtos) {
 function atualizarEstatísticasProdutos(lista = produtos) {
   const total = lista.length;
   const valorTotal = lista.reduce(
-    (acc, p) => acc + p.quantidade * p.precoUnitario,
+    (acc, p) => acc + p.quantidade * parseFloat(p.preco),
     0
   );
 
@@ -131,8 +153,9 @@ function aplicarFiltrosProdutos() {
 
   let produtosFiltrados = produtos.filter((produto) => {
     let passou = true;
+    const categoriaNome = produto.categoria?.nome || "";
 
-    if (categoria && produto.categoria !== categoria) {
+    if (categoria && categoriaNome !== categoria) {
       passou = false;
     }
 
@@ -176,18 +199,18 @@ function renderizarTabelaMovimentacoes(lista = movimentacoes) {
   tabelaMovimentacoesRel.innerHTML = "";
 
   lista.forEach((mov) => {
-    const tipoFormatado =
-      mov.tipo === "Saída" ? "Saída" : "Entrada";
-    const classeTipo =
-      mov.tipo === "Entrada" ? "entrada" : "saida";
+    const tipoFormatado = mov.tipo === "saida" ? "Saída" : "Entrada";
+    const classeTipo = mov.tipo === "entrada" ? "entrada" : "saida";
+    const nomeProduto = mov.produto?.nome || "Produto não encontrado";
+    const dataFormatada = new Date(mov.criado_em).toLocaleString('pt-BR');
 
     const linha = document.createElement("tr");
     linha.innerHTML = `
-      <td>${mov.nome}</td>
+      <td>${nomeProduto}</td>
       <td class="${classeTipo}">${tipoFormatado}</td>
       <td>${mov.quantidade}</td>
-      <td>${mov.data}</td>
-      <td>${mov.destino || "-"}</td>
+      <td>${dataFormatada}</td>
+      <td>-</td>
     `;
     tabelaMovimentacoesRel.appendChild(linha);
   });
@@ -199,7 +222,7 @@ function atualizarEstatísticasMovimentacoes(lista = movimentacoes) {
   let saida = 0;
 
   lista.forEach((mov) => {
-    if (mov.tipo === "Entrada") {
+    if (mov.tipo === "entrada") {
       entrada += mov.quantidade;
     } else {
       saida += mov.quantidade;
@@ -223,12 +246,9 @@ function setarDataAtual() {
   document.getElementById("filtroDataInicio").value = dataInicialFormatada;
 }
 
-function converterDataParaBR(dataBR) {
-  // Converte "15/04/2026 09:30" para Date
-  const partes = dataBR.split(" ");
-  const dataParte = partes[0]; // "15/04/2026"
-  const [dia, mes, ano] = dataParte.split("/");
-  return new Date(`${ano}-${mes}-${dia}`);
+function converterDataParaBR(dataISO) {
+  // Converte "2026-04-15T09:30:00" para Date
+  return new Date(dataISO);
 }
 
 function aplicarFiltrosMovimentacoes() {
@@ -239,17 +259,18 @@ function aplicarFiltrosMovimentacoes() {
 
   let movimentacoesFiltradas = movimentacoes.filter((mov) => {
     let passou = true;
+    const tipoMovimentacao = mov.tipo === "entrada" ? "Entrada" : "Saída";
 
-    if (tipo && mov.tipo !== tipo) {
+    if (tipo && tipoMovimentacao !== tipo) {
       passou = false;
     }
 
-    const dataMovimentacao = converterDataParaBR(mov.data);
+    const dataMovimentacao = new Date(mov.criado_em);
     if (dataMovimentacao < dataInicio || dataMovimentacao > dataFim) {
       passou = false;
     }
 
-    if (produto && mov.nome !== produto) {
+    if (produto && mov.produto?.nome !== produto) {
       passou = false;
     }
 
@@ -288,6 +309,7 @@ function renderizarTabelaEstoqueBaixo(lista = produtos) {
   produtosBaixos.forEach((produto) => {
     let prioridade = "Baixa";
     let classPrioridade = "";
+    const categoriaNome = produto.categoria?.nome || "Sem categoria";
 
     if (produto.quantidade === 0) {
       prioridade = "CRÍTICA";
@@ -304,9 +326,9 @@ function renderizarTabelaEstoqueBaixo(lista = produtos) {
     linha.innerHTML = `
       <td>${produto.id}</td>
       <td>${produto.nome}</td>
-      <td>${produto.categoria}</td>
+      <td>${categoriaNome}</td>
       <td><strong>${produto.quantidade}</strong></td>
-      <td>${formatarMoeda(produto.precoUnitario)}</td>
+      <td>${formatarMoeda(parseFloat(produto.preco))}</td>
       <td class="prioridade ${classPrioridade}">${prioridade}</td>
     `;
     tabelaEstoqueBaixoRel.appendChild(linha);
@@ -330,8 +352,9 @@ function aplicarFiltrosEstoqueBaixo() {
 
   let produtosFiltrados = produtos.filter((produto) => {
     let passou = true;
+    const categoriaNome = produto.categoria?.nome || "";
 
-    if (categoria && produto.categoria !== categoria) {
+    if (categoria && categoriaNome !== categoria) {
       passou = false;
     }
 
@@ -484,12 +507,14 @@ function calcularLarguraColunas(dados) {
 }
 
 // Carregar relatório de produtos ao iniciar
-carregarRelatoriosProdutos();
+(async () => {
+  await carregarDados();
+  carregarRelatoriosProdutos();
+})();
 
-// Atualizar quando produtos são modificados
-window.addEventListener("produtosAtualizados", () => {
-  produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-  movimentacoes = JSON.parse(localStorage.getItem("movimentacoes")) || [];
+// Atualizar quando dados são modificados
+window.addEventListener("produtosAtualizados", async () => {
+  await carregarDados();
   
   const abaAtiva = document.querySelector(".aba-content.ativa").id;
   if (abaAtiva === "aba-produtos") {
