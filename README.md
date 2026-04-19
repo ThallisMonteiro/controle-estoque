@@ -2,7 +2,7 @@
 
 Projeto de um sistema de controle de estoque desenvolvido para prática de desenvolvimento web full stack.
 
-Inicialmente criado com **HTML, CSS e JavaScript**, o projeto evoluiu para uma arquitetura com **API REST em Node.js e Express**, integrada a um banco de dados MySQL.
+Inicialmente criado com **HTML, CSS e JavaScript**, o projeto evoluiu para uma arquitetura com **API REST em Node.js e Express**, integrada a um banco de dados MySQL, utilizando ORM Prisma para relação com o banco.
 
 ---
 
@@ -63,3 +63,11 @@ Este projeto tem como objetivo:
 - trabalhar com banco de dados relacional
 - aplicar boas práticas de organização de código
 
+---
+
+## Como rodar o projeto? 
+
+- Primeiro baixe a versão mais atualizada do repositório utilizando `git pull`
+- Após, utilize o console(aspas ' + ctrl) e navegue até o backend utilizando `cd backend`
+- Deverá ver no console algo como `controle-estoque-main\backend>`
+- Utilize o comando `npm install` para instalar todas as dependencias do projeto
