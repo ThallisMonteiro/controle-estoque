@@ -12,5 +12,35 @@ model Categoria {
   nome      String   @unique @db.VarChar(100)
   descricao String?  @db.Text
   criado_em DateTime @default(now())
+  produtos  Produto[]
 }
 
+model Movimentacao {
+  id         Int      @id @default(autoincrement())
+  produto_id Int
+  produto    Produto  @relation(fields: [produto_id], references: [id])
+  tipo       String   @db.VarChar(10)
+  quantidade Int
+  criado_em  DateTime @default(now())
+}
+
+model Produto {
+  id             Int              @id @default(autoincrement())
+  nome           String           @db.VarChar(100)
+  quantidade     Int              @default(0)
+  preco          Decimal          @db.Decimal(10, 2)
+  categoria_id   Int?
+  categoria      Categoria?       @relation(fields: [categoria_id], references: [id])
+  movimentacoes  Movimentacao[]
+  criado_em      DateTime         @default(now())
+}
+
+model Usuario {
+  id            Int      @id @default(autoincrement())
+  nome          String   @db.VarChar(100)
+  email         String   @unique @db.VarChar(100)
+  senha         String   @db.VarChar(255)
+  ativo         Boolean  @default(true)
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+}
