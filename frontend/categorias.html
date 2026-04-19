@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categorias - Estoque Inteligente</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+
+  <body>
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Gestão de Categorias</h1>
+      </div>
+
+      <div class="form-categoria" id="formCategoria" style="display: none">
+        <h3>Nova Categoria</h3>
+
+        <input type="text" id="nome" placeholder="Nome da Categoria"/>
+        <input type="text" id="descricao" placeholder="Descrição (opcional)" />
+        <button id="salvarCategoria" class="btn-primary">Salvar</button>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="buscarCategoria" placeholder="Buscar categoria..." />
+        <button id="btnAddCategoria" class="btn-primary">+ Adicionar Categoria</button>
+      </div>
+
+      <div class="tabela">
+        <h2>Categorias</h2>
+        <div class="tabela-stats">
+          <span>Total de categorias: <strong id="totalCategorias">0</strong></span>
+        </div>
+        <table class="tabela-categorias">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="js/sidebar.js"></script>
+    <script src="js/categorias.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

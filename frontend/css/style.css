@@ -1067,3 +1067,61 @@ textarea:focus {
   }
 }
 
+/* Form Categoria */
+.form-categoria {
+  background: var(--bg-card);
+  padding: clamp(16px, 3vw, 24px);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+  margin: clamp(16px, 3vw, 24px) 0;
+  max-width: 100%;
+}
+
+.form-categoria h3 {
+  font-size: clamp(16px, 3vw, 18px);
+  margin-bottom: 8px;
+}
+
+#buscarCategoria {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Tabela Categorias */
+.tabela-categorias {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  font-size: clamp(12px, 2vw, 14px);
+  table-layout: fixed;
+  box-sizing: border-box;
+}
+
+.tabela-categorias th {
+  text-align: left;
+  font-size: clamp(11px, 1.5vw, 13px);
+  color: var(--text-muted);
+  padding: clamp(10px, 2vw, 14px);
+  background: #162032;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tabela-categorias td {
+  padding: clamp(10px, 2vw, 14px);
+  border-top: 1px solid var(--border);
+  word-break: break-word;
+}
+
+.tabela-categorias tr:hover {
+  background: var(--bg-hover);
+  transition: background-color 0.2s ease;
+}
+
