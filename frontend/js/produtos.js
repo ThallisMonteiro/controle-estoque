@@ -1,4 +1,7 @@
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+const API_URL = 'http://localhost:3000/api';
+
+let produtos = [];
+let categorias = [];
 let produtoEditando = null;
 const btnAdicionar = document.getElementById("btnAddProduto");
 const formProduto = document.getElementById("formProduto");
@@ -17,6 +20,28 @@ function formatarMoeda(valor) {
   });
 }
 
+async function carregarCategorias() {
+  try {
+    const response = await fetch(`${API_URL}/categorias`);
+    if (!response.ok) throw new Error('Erro ao carregar categorias');
+    categorias = await response.json();
+  } catch (error) {
+    console.error('Erro:', error);
+  }
+}
+
+async function carregarProdutos() {
+  try {
+    const response = await fetch(`${API_URL}/produtos`);
+    if (!response.ok) throw new Error('Erro ao carregar produtos');
+    produtos = await response.json();
+    renderizarProdutos();
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao carregar produtos do servidor');
+  }
+}
+
 function buscarProdutos() {
   const termo = removerAcentos(inputBusca.value.toLowerCase().trim());
 
@@ -27,7 +52,6 @@ function buscarProdutos() {
 
   const produtosFiltrados = produtos.filter((produto) => {
     const nomeSemAcento = removerAcentos(produto.nome.toLowerCase());
-
     return nomeSemAcento.includes(termo);
   });
 
@@ -38,15 +62,16 @@ function renderizarProdutos(lista = produtos) {
   tbody.innerHTML = "";
 
   lista.forEach((produto) => {
-    const precoTotal = produto.quantidade * produto.precoUnitario;
+    const precoTotal = produto.quantidade * parseFloat(produto.preco);
+    const categoriaNome = produto.categoria?.nome || "Sem categoria";
 
     const linha = `
       <tr>
         <td>${produto.id}</td>
         <td>${produto.nome}</td>
-        <td>${produto.categoria}</td>
+        <td>${categoriaNome}</td>
         <td>${produto.quantidade}</td>
-        <td>${formatarMoeda(produto.precoUnitario)}</td>
+        <td>${formatarMoeda(parseFloat(produto.preco))}</td>
         <td>${formatarMoeda(precoTotal)}</td>
         <td>
           <button class="btn-edit" onclick="editarProduto(${produto.id})">Editar</button>
@@ -63,27 +88,36 @@ function editarProduto(id) {
   const produto = produtos.find((p) => p.id === id);
 
   document.getElementById("nome").value = produto.nome;
-  document.getElementById("categoria").value = produto.categoria;
+  document.getElementById("categoria").value = produto.categoria_id || "";
   document.getElementById("quantidade").value = produto.quantidade;
-  document.getElementById("precoUnitario").value = produto.precoUnitario;
+  document.getElementById("precoUnitario").value = parseFloat(produto.preco);
 
   formProduto.style.display = "flex";
 
   produtoEditando = id;
 }
 
-tbody.addEventListener("click", (event) => {
+tbody.addEventListener("click", async (event) => {
   if (event.target.classList.contains("btn-delete")) {
     if (!confirm("Deseja realmente excluir este produto?")) return;
     const id = Number(event.target.dataset.id);
 
-    produtos = produtos.filter((produto) => produto.id !== id);
+    try {
+      const response = await fetch(`${API_URL}/produtos/${id}`, {
+        method: 'DELETE'
+      });
 
-    localStorage.setItem("produtos", JSON.stringify(produtos));
+      if (!response.ok) {
+        const erro = await response.json();
+        throw new Error(erro.error || 'Erro ao deletar produto');
+      }
 
-    renderizarProdutos();
-
-    window.dispatchEvent(new Event("produtosAtualizados"));
+      alert('Produto deletado com sucesso!');
+      await carregarProdutos();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Erro: ' + error.message);
+    }
   }
 });
 
@@ -92,59 +126,72 @@ btnAdicionar.addEventListener("click", () => {
     formProduto.style.display === "none" ? "flex" : "none";
 });
 
-btnSalvar.addEventListener("click", () => {
+btnSalvar.addEventListener("click", async () => {
   const nome = document.getElementById("nome").value;
-  const categoria = document.getElementById("categoria").value;
+  const categoria_id = document.getElementById("categoria").value;
   const quantidade = parseInt(document.getElementById("quantidade").value);
-  const precoUnitario = parseFloat(
-    document.getElementById("precoUnitario").value,
-  );
+  const preco = parseFloat(document.getElementById("precoUnitario").value);
 
-  if (!nome || !categoria || !quantidade || !precoUnitario) {
-    alert("Preencha todos os campos!");
+  if (!nome || !quantidade || !preco) {
+    alert("Preencha todos os campos obrigatórios!");
     return;
   }
 
-  const novoProduto = {
-    id: produtos.length + 1,
-    nome,
-    categoria,
-    quantidade,
-    precoUnitario,
-  };
+  try {
+    if (produtoEditando) {
+      const response = await fetch(`${API_URL}/produtos/${produtoEditando}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome,
+          quantidade,
+          preco,
+          categoria_id: categoria_id ? parseInt(categoria_id) : null
+        })
+      });
 
-  if (produtoEditando) {
-    const produto = produtos.find((p) => p.id === produtoEditando);
+      if (!response.ok) {
+        const erro = await response.json();
+        throw new Error(erro.error || 'Erro ao atualizar produto');
+      }
 
-    produto.nome = nome;
-    produto.categoria = categoria;
-    produto.quantidade = quantidade;
-    produto.precoUnitario = precoUnitario;
+      alert('Produto atualizado com sucesso!');
+      produtoEditando = null;
+    } else {
+      const response = await fetch(`${API_URL}/produtos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome,
+          quantidade,
+          preco,
+          categoria_id: categoria_id ? parseInt(categoria_id) : null
+        })
+      });
 
-    produtoEditando = null;
-  } else {
-    const novoProduto = {
-      id: produtos.length + 1,
-      nome,
-      categoria,
-      quantidade,
-      precoUnitario,
-    };
+      if (!response.ok) {
+        const erro = await response.json();
+        throw new Error(erro.error || 'Erro ao criar produto');
+      }
 
-    produtos.push(novoProduto);
+      alert('Produto criado com sucesso!');
+    }
+
+    formProduto.style.display = "none";
+    document.getElementById("nome").value = "";
+    document.getElementById("categoria").value = "";
+    document.getElementById("quantidade").value = "";
+    document.getElementById("precoUnitario").value = "";
+    
+    await carregarProdutos();
+    window.dispatchEvent(new Event("produtosAtualizados"));
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro: ' + error.message);
   }
-  localStorage.setItem("produtos", JSON.stringify(produtos));
-  renderizarProdutos();
-
-  window.dispatchEvent(new Event("produtosAtualizados"));
-
-  formProduto.style.display = "none";
-
-  document.getElementById("nome").value = "";
-  document.getElementById("categoria").value = "";
-  document.getElementById("quantidade").value = "";
-  document.getElementById("precoUnitario").value = "";
 });
 
 renderizarProdutos();
+carregarCategorias();
+carregarProdutos();
 inputBusca.addEventListener("input", buscarProdutos);
