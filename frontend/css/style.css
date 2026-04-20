@@ -39,7 +39,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
-  max-width: 89vw;
+  max-width: 99vw;
 }
 
 .sidebar {
@@ -57,7 +57,7 @@ body {
 }
 
 .sidebar:hover {
-  width: 250px;
+  width: 190px;
 }
 
 .logo_text {
