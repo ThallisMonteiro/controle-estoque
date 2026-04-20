@@ -198,9 +198,14 @@ formAlterarSenha.addEventListener('submit', async (e) => {
 // Event Listener - Logout
 btnLogout.addEventListener('click', () => {
   if (confirm('Deseja realmente sair?')) {
-    alert('Logout realizado. Redirecionando...');
-    // Em produção, redirecionar para página de login
-    window.location.href = 'index.html';
+    // Limpar dados do usuário
+    localStorage.removeItem('usuarioLogado');
+    localStorage.removeItem('usuarioEmail');
+    localStorage.removeItem('usuarioNome');
+    localStorage.removeItem('usuarioRole');
+    
+    // Redirecionar para página de login
+    window.location.href = 'login.html';
   }
 });
 
