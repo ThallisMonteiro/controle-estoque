@@ -6,9 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
+    "setup": "node setup.js",
+    "dev": "node setup.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "migrate:reset": "npx prisma migrate reset --force",
+    "migrate:dev": "npx prisma migrate dev",
+    "generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",

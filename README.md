@@ -1,73 +1,166 @@
-# 📦 Sistema de Controle de Estoque
+# 🏭 Estoque Inteligente
 
-Projeto de um sistema de controle de estoque desenvolvido para prática de desenvolvimento web full stack.
+Sistema completo de gestão de estoque com autenticação, controle de produtos, categorias, movimentações e relatórios.
 
-Inicialmente criado com **HTML, CSS e JavaScript**, o projeto evoluiu para uma arquitetura com **API REST em Node.js e Express**, integrada a um banco de dados MySQL, utilizando ORM Prisma para relação com o banco.
+Projeto de um sistema de controle de estoque desenvolvido com **HTML5, CSS3 e JavaScript vanilla** no frontend, integrado a uma **API REST em Node.js e Express** com banco de dados **MySQL** e **ORM Prisma**.
 
 ---
 
-## 🚀 Tecnologias utilizadas
+## 🚀 Setup Rápido (Primeira Vez)
 
-### 🔹 Frontend
-- HTML5
-- CSS3
-- JavaScript
+### Pré-requisitos
+- ✅ Node.js 16+ instalado
+- ✅ MySQL 5.7+ instalado e rodando
+- ✅ npm ou yarn
+
+### TUTORIAL PARA IDIOTAS, IMPOSSÍVEL DAR ERRADO THALLIS
+
+```bash
+# 1. Navegue até a pasta do backend
+cd backend
+
+# 2. Instale as dependências
+npm install
+
+# 3. Configure o arquivo .env (veja o arquivo .env.example)
+
+# 4. Execute o setup inicial (Comando Único!)
+npm run setup
+
+# 5. Pronto! O backend está rodando em http://localhost:3000
+```
+
+✨ O comando `npm run setup` irá:
+- ✅ Resetar o banco de dados
+- ✅ Executar as migrations Prisma
+- ✅ Gerar o cliente Prisma
+- ✅ Popular dados iniciais (seed)
+- ✅ **Iniciar o servidor automaticamente**
+
+Depois acesse `frontend/login.html` em seu navegador!
+
+---
+
+## 📋 Credenciais Padrão
+
+Após o setup, acesse com:
+
+| Tipo | Email | Senha |
+|------|-------|-------|
+| 👑 Admin | `admin@estoque.com` | `admin123` |
+| 👤 Usuário | `usuario@estoque.com` | `admin123` |
+
+---
+
+## 🛠️ Tecnologias Utilizadas
 
 ### 🔹 Backend
-- Node.js
-- Express
+- **Node.js** - Runtime JavaScript
+- **Express 5.2** - Framework web
+- **Prisma 6.19** - ORM
+- **MySQL 5.7+** - Banco de dados
+- **bcryptjs** - Hash de senhas
+- **CORS** - Controle de origem
 
-### 🔹 Banco de Dados
-- MySQL
-
----
-
-## 📌 Funcionalidades
-
-✔ Cadastro de produtos  
-✔ Listagem de produtos via API  
-✔ Atualização e exclusão de produtos (CRUD)  
-✔ Controle de estoque  
-✔ Registro de movimentações (entrada e saída)  
-✔ Integração entre frontend e backend via requisições HTTP  
+### 🔹 Frontend
+- **HTML5** - Estrutura
+- **CSS3** - Estilos responsivos
+- **JavaScript Vanilla** - Interatividade
+- **Chart.js** - Gráficos
+- **Lucide Icons** - Ícones SVG
+- **XLSX** - Exportação Excel
 
 ---
 
-## 🔗 API REST
+## 📡 API REST Endpoints
 
-A aplicação conta com uma API REST com os seguintes endpoints:
+### 🔐 Autenticação
+```
+POST   /api/auth/login              → Fazer login
+POST   /api/auth/registrar          → Registrar novo usuário
+```
 
-- `GET /api/produtos` → listar produtos  
-- `POST /api/produtos` → criar produto  
-- `PUT /api/produtos/:id` → atualizar produto  
-- `DELETE /api/produtos/:id` → remover produto  
-- `POST /api/movimentacoes` → registrar entrada/saída de estoque  
+### 👤 Usuários
+```
+GET    /api/usuarios/perfil         → Dados do usuário
+PUT    /api/usuarios/perfil         → Atualizar perfil
+POST   /api/usuarios/alterar-senha  → Trocar senha
+GET    /api/usuarios/estatisticas   → Estatísticas
+```
+
+### 📂 Categorias
+```
+GET    /api/categorias              → Listar categorias
+POST   /api/categorias              → Criar categoria
+PUT    /api/categorias/:id          → Atualizar categoria
+DELETE /api/categorias/:id          → Deletar categoria
+```
+
+### 📦 Produtos
+```
+GET    /api/produtos                → Listar produtos
+POST   /api/produtos                → Criar produto
+PUT    /api/produtos/:id            → Atualizar produto
+DELETE /api/produtos/:id            → Deletar produto
+```
+
+### 🔄 Movimentações
+```
+GET    /api/movimentacoes           → Listar movimentações
+POST   /api/movimentacoes           → Registrar movimentação
+DELETE /api/movimentacoes/:id       → Deletar movimentação
+```
 
 ---
 
-## 🚧 Status do Projeto
+## 🔧 Scripts Disponíveis
 
-⚠️ Em desenvolvimento
+### Backend (`cd backend`)
 
-O sistema continua em evolução, com melhorias constantes tanto no backend quanto no frontend.
+```bash
+# ⭐ PRINCIPAL: Setup completo (recomendado primeira vez)
+npm run setup
+npm run dev    # Alias para setup
+
+# Iniciar servidor apenas
+npm start
+
+# Banco de dados
+npm run migrate:reset   # Resetar banco
+npm run migrate:dev     # Criar nova migration
+npm run generate        # Gerar cliente Prisma
+npm run seed            # Executar seed manualmente
+
+# Código
+npm run lint            # Validar código
+npm run lint:fix        # Corrigir erros
+```
 
 ---
 
-## 🎯 Objetivo do Projeto
+### Backend (Heroku, Railway, etc)
+1. Configure variáveis de ambiente
+2. Execute migrações
+3. Configure CORS para seu domínio
+4. Deploy seu provider
 
-Este projeto tem como objetivo:
-
-- praticar desenvolvimento backend com Node.js
-- entender a construção de APIs REST
-- integrar frontend com backend
-- trabalhar com banco de dados relacional
-- aplicar boas práticas de organização de código
+### Frontend (Vercel, Netlify, GitHub Pages)
+1. Altere `API_URL` em `js/auth.js` para seu servidor
+2. Deploy a pasta `frontend/`
+3. Configure domínio no CORS backend
 
 ---
 
-## Como rodar o projeto? 
+✅ **Concluído e Funcionando**
+- Sistema completo de autenticação
+- CRUD de todas as funcionalidades
+- API REST documentada
+- Frontend responsivo
+- Dashboard com gráficos
+- Relatórios e exportação Excel
 
-- Primeiro baixe a versão mais atualizada do repositório utilizando `git pull`
-- Após, utilize o console(aspas ' + ctrl) e navegue até o backend utilizando `cd backend`
-- Deverá ver no console algo como `controle-estoque-main\backend>`
-- Utilize o comando `npm install` para instalar todas as dependencias do projeto
+---
+
+**Última atualização:** Abril 2026  
+**Versão:** 1.0.0  
+**Desenvolvedor:** Sistema de Gestão de Estoque

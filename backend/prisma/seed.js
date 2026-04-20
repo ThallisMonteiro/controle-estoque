@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
@@ -10,6 +11,36 @@ async function main() {
   await prisma.movimentacao.deleteMany({});
   await prisma.produto.deleteMany({});
   await prisma.categoria.deleteMany({});
+  await prisma.usuario.deleteMany({});
+
+  // 0. Criar Usuários
+  console.log('👤 Criando usuários...');
+  const senhaHash = await bcrypt.hash('admin123', 10);
+  
+  const usuarios = await Promise.all([
+    prisma.usuario.create({
+      data: {
+        nome: 'Administrador',
+        email: 'admin@estoque.com',
+        senha: senhaHash,
+        role: 'admin',
+        ativo: true
+      }
+    }),
+    prisma.usuario.create({
+      data: {
+        nome: 'Usuário Teste',
+        email: 'usuario@estoque.com',
+        senha: senhaHash,
+        role: 'usuario',
+        ativo: true
+      }
+    })
+  ]);
+
+  console.log(`✅ ${usuarios.length} usuários criados`);
+  console.log(`   📧 Admin: admin@estoque.com (senha: admin123)`);
+  console.log(`   📧 Usuário: usuario@estoque.com (senha: admin123)`);
 
   // 1. Criar Categorias
   console.log('📂 Criando categorias...');
