@@ -5,6 +5,7 @@
   "main": "db.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx prisma generate",
     "start": "node server.js",
     "setup": "node setup.js",
     "dev": "node setup.js",
