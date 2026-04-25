@@ -1,7 +1,7 @@
 // Verificar autenticação
 verificarAutenticacao();
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://controle-estoque-kvku.onrender.com/api';
 
 let usuarioAtual = null;
 

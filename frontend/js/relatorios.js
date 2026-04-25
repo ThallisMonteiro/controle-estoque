@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://controle-estoque-kvku.onrender.com/api';
 
 // Dados da API
 let produtos = [];
