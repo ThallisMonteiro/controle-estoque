@@ -8,14 +8,14 @@ generator erd {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Categoria {
   id        Int      @id @default(autoincrement())
-  nome      String   @unique @db.VarChar(100)
-  descricao String?  @db.Text
+  nome      String   @unique
+  descricao String?
   criado_em DateTime @default(now())
   produtos  Produto[]
 }
@@ -24,16 +24,16 @@ model Movimentacao {
   id         Int      @id @default(autoincrement())
   produto_id Int
   produto    Produto  @relation(fields: [produto_id], references: [id])
-  tipo       String   @db.VarChar(10)
+  tipo       String
   quantidade Int
   criado_em  DateTime @default(now())
 }
 
 model Produto {
   id             Int              @id @default(autoincrement())
-  nome           String           @db.VarChar(100)
+  nome           String
   quantidade     Int              @default(0)
-  preco          Decimal          @db.Decimal(10, 2)
+  preco          Decimal
   categoria_id   Int?
   categoria      Categoria?       @relation(fields: [categoria_id], references: [id])
   movimentacoes  Movimentacao[]
@@ -42,10 +42,10 @@ model Produto {
 
 model Usuario {
   id            Int      @id @default(autoincrement())
-  nome          String   @db.VarChar(100)
-  email         String   @unique @db.VarChar(100)
-  senha         String   @db.VarChar(255)
-  role          String   @default("usuario") @db.VarChar(20)
+  nome          String
+  email         String   @unique
+  senha         String
+  role          String   @default("usuario")
   ativo         Boolean  @default(true)
   criado_em     DateTime @default(now())
   atualizado_em DateTime @updatedAt
