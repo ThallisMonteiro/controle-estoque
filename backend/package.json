@@ -13,7 +13,8 @@
     "seed": "node prisma/seed.js",
     "migrate:reset": "npx prisma migrate reset --force",
     "migrate:dev": "npx prisma migrate dev",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",

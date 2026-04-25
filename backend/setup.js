@@ -29,12 +29,17 @@ function log(message, color = 'reset') {
 function executeCommand(command, description) {
   try {
     log(`\n▶ ${description}...`, 'blue');
-    execSync(command, { stdio: 'inherit', shell: true });
+    execSync(command, { 
+      stdio: 'inherit', 
+      shell: true,
+      env: { ...process.env, NODE_ENV: 'production' }
+    });
     log(`✓ ${description} concluído!`, 'green');
     return true;
   } catch (error) {
     log(`✗ Erro ao executar: ${description}`, 'red');
     log(`  Comando: ${command}`, 'red');
+    log(`  Erro: ${error.message}`, 'red');
     return false;
   }
 }
@@ -64,20 +69,36 @@ async function setup() {
 
   // 1. Executar migrations (sem resetar dados)
   success &= executeCommand(
-    'npx prisma migrate deploy',
+    'node ./node_modules/.bin/prisma migrate deploy --schema=./prisma/schema.prisma',
     'Executando migrations do Prisma'
   );
 
   if (!success) {
+    log('\n⚠️  Tentando alternativa...', 'yellow');
+    success = executeCommand(
+      'npx prisma migrate deploy',
+      'Executando migrations (alternativa)'
+    );
+  }
+
+  if (!success) {
     log('\n✗ Erro ao executar as migrations!', 'red');
-    process.exit(1);
+    log('  Dica: Execute manualmente no Render Shell: npx prisma migrate deploy', 'yellow');
+    // Não fazer exit, deixar continuar
   }
 
   // 2. Gerar cliente Prisma
   success &= executeCommand(
-    'npx prisma generate',
+    'node ./node_modules/.bin/prisma generate --schema=./prisma/schema.prisma',
     'Gerando cliente Prisma'
   );
+
+  if (!success) {
+    success = executeCommand(
+      'npx prisma generate',
+      'Gerando cliente Prisma (alternativa)'
+    );
+  }
 
   // 3. Executar seed (se existir)
   const seedPath = path.join(__dirname, 'prisma', 'seed.js');
@@ -87,7 +108,7 @@ async function setup() {
   }
 
   log('\n╔════════════════════════════════════════════╗', 'blue');
-  log('║  ✓ Setup Concluído com Sucesso!            ║', 'green');
+  log('║  ✓ Setup Concluído!                        ║', 'green');
   log('║  Iniciando servidor...                     ║', 'blue');
   log('╚════════════════════════════════════════════╝', 'blue');
 
