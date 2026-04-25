@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Redirecionar para login se não autenticado
+      const usuarioLogado = localStorage.getItem('usuarioLogado');
+      if (!usuarioLogado) {
+        window.location.href = '/login.html';
+      }
+    </script>
   </head>
   <body>
     <div class="main-content">
