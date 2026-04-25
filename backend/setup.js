@@ -4,11 +4,9 @@
  * Script de Setup Inicial do Projeto
  * 
  * Executa as seguintes operações:
- * 1. Reseta o banco de dados (deleta todas as tabelas)
- * 2. Executa as migrations do Prisma
- * 3. Gera o cliente Prisma
- * 4. Executa o seed (popula dados iniciais)
- * 5. Inicia o servidor
+ * 1. Executa as migrations do Prisma (sem resetar dados)
+ * 2. Gera o cliente Prisma
+ * 3. Inicia o servidor
  */
 
 const { execSync } = require('child_process');
@@ -48,14 +46,11 @@ async function setup() {
   log('╚════════════════════════════════════════════╝', 'blue');
 
   log('\nEste script irá:', 'yellow');
-  log('  1. Resetar o banco de dados (deleta todas as tabelas)', 'yellow');
-  log('  2. Executar as migrations do Prisma', 'yellow');
-  log('  3. Gerar o cliente Prisma (@prisma/client)', 'yellow');
-  log('  4. Popular dados iniciais (seed)', 'yellow');
-  log('  5. Iniciar o servidor', 'yellow');
+  log('  1. Executar as migrations do Prisma (sem resetar dados)', 'yellow');
+  log('  2. Gerar o cliente Prisma (@prisma/client)', 'yellow');
+  log('  3. Iniciar o servidor', 'yellow');
 
-  log('\n⚠️  ATENÇÃO: Todos os dados existentes serão perdidos!', 'red');
-  log('Certifique-se de que deseja continuar.\n', 'yellow');
+  log('\n✓ Os dados existentes serão preservados!', 'green');
 
   // Verificar se .env existe
   const envPath = path.join(__dirname, '.env');
@@ -67,14 +62,14 @@ async function setup() {
 
   let success = true;
 
-  // 1. Reset do banco de dados
+  // 1. Executar migrations (sem resetar dados)
   success &= executeCommand(
-    'npx prisma migrate reset --force',
-    'Resetando banco de dados'
+    'npx prisma migrate deploy',
+    'Executando migrations do Prisma'
   );
 
   if (!success) {
-    log('\n✗ Erro ao resetar o banco de dados!', 'red');
+    log('\n✗ Erro ao executar as migrations!', 'red');
     process.exit(1);
   }
 
@@ -87,12 +82,8 @@ async function setup() {
   // 3. Executar seed (se existir)
   const seedPath = path.join(__dirname, 'prisma', 'seed.js');
   if (fs.existsSync(seedPath)) {
-    success &= executeCommand(
-      'node prisma/seed.js',
-      'Populando dados iniciais (seed)'
-    );
-  } else {
-    log('\n⚠️  Arquivo de seed não encontrado. Pulando esta etapa...', 'yellow');
+    log('\n⚠️  Arquivo de seed encontrado, mas pulando esta etapa...', 'yellow');
+    log('  (Use "npm run seed" para popular dados iniciais)', 'yellow');
   }
 
   log('\n╔════════════════════════════════════════════╗', 'blue');
