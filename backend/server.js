@@ -3,15 +3,19 @@ const cors    = require('cors');
 require('dotenv').config();
 
 const app = express();
-console.log("DATABASE_URL:", process.env.DATABASE_URL)
+const { verificarToken } = require('./middleware/autenticacao');
+
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/categorias',     require('./routes/categorias'));
-app.use('/api/produtos',       require('./routes/produtos'));
-app.use('/api/movimentacoes',  require('./routes/movimentacoes'));
-app.use('/api/usuarios',       require('./routes/usuarios'));
-app.use('/api/auth',           require('./routes/autenticacao'));
+// Rotas públicas (sem autenticação)
+app.use('/api/auth', require('./routes/autenticacao'));
+
+// Rotas protegidas (requerem JWT)
+app.use('/api/categorias',     verificarToken, require('./routes/categorias'));
+app.use('/api/produtos',       verificarToken, require('./routes/produtos'));
+app.use('/api/movimentacoes',  verificarToken, require('./routes/movimentacoes'));
+app.use('/api/usuarios',       verificarToken, require('./routes/usuarios'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

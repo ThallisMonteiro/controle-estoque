@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const prisma = new PrismaClient();
 
 exports.registrar = async (req, res) => {
@@ -58,10 +59,17 @@ exports.registrar = async (req, res) => {
       }
     });
 
+    // Gerar JWT
+    const token = jwt.sign(
+      { id: usuario.id, email: usuario.email, role: usuario.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     res.status(201).json({
       message: 'Usuário registrado com sucesso!',
       usuario,
-      token: `usuario_${usuario.id}_${Date.now()}`
+      token
     });
   } catch (err) {
     console.error('Erro ao registrar:', err);
@@ -97,6 +105,13 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
+    // Gerar JWT
+    const token = jwt.sign(
+      { id: usuario.id, email: usuario.email, role: usuario.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     res.json({
       message: 'Login realizado com sucesso!',
       usuario: {
@@ -105,7 +120,7 @@ exports.login = async (req, res) => {
         email: usuario.email,
         role: usuario.role
       },
-      token: `usuario_${usuario.id}_${Date.now()}`
+      token
     });
   } catch (err) {
     console.error('Erro ao fazer login:', err);
