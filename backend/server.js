@@ -3,7 +3,7 @@ const cors    = require('cors');
 require('dotenv').config();
 
 const app = express();
-
+console.log("DATABASE_URL:", process.env.DATABASE_URL)
 app.use(cors());
 app.use(express.json());
 
