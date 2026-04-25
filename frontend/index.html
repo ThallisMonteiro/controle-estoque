@@ -10,7 +10,9 @@
     <script>
       // Redirecionar para login se não autenticado
       const usuarioLogado = localStorage.getItem('usuarioLogado');
-      if (!usuarioLogado) {
+      const authToken = localStorage.getItem('authToken');
+      if (!usuarioLogado || !authToken) {
+        localStorage.clear();
         window.location.href = '/login.html';
       }
     </script>

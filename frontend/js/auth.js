@@ -31,12 +31,13 @@ function mostrarMensagem(texto, tipo = 'sucesso') {
   }, 5000);
 }
 
-function irParaAbaSucesso(usuario) {
+function irParaAbaSucesso(usuario, token) {
   // Salvar dados no localStorage
   localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
   localStorage.setItem('usuarioEmail', usuario.email);
   localStorage.setItem('usuarioNome', usuario.nome);
   localStorage.setItem('usuarioRole', usuario.role);
+  localStorage.setItem('authToken', token); // 🔐 Armazenar JWT
   
   // Redirecionar para dashboard
   window.location.href = 'index.html';
@@ -97,7 +98,7 @@ formLogin.addEventListener('submit', async (e) => {
     
     // Aguardar um pouco antes de redirecionar
     setTimeout(() => {
-      irParaAbaSucesso(dados.usuario);
+      irParaAbaSucesso(dados.usuario, dados.token);
     }, 1000);
   } catch (error) {
     console.error('Erro:', error);
@@ -161,7 +162,7 @@ formRegistro.addEventListener('submit', async (e) => {
     
     // Aguardar um pouco antes de redirecionar
     setTimeout(() => {
-      irParaAbaSucesso(dados.usuario);
+      irParaAbaSucesso(dados.usuario, dados.token);
     }, 1000);
   } catch (error) {
     console.error('Erro:', error);
